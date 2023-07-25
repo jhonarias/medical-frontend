@@ -1,0 +1,52 @@
+<ng-container *ngIf="resourceType === resourceTypeEnum.TOPIC; else subtopicTemplate">
+    <h1>Crear tema</h1>
+</ng-container>
+
+<ng-template #subtopicTemplate>
+    <h1>Crear subtema</h1>
+</ng-template>
+
+<form [formGroup]="form">
+    <label for="name"></label>
+    <input type="text" id="name" formControlName="name" placeholder="name">
+    <p *ngIf="form.get('name')?.invalid && (form.get('name')?.dirty || form.get('name')?.touched)">Por favor selecciona el nombre</p>
+    <br>
+    <label for="description"></label>
+    <textarea id="description" autocomplete="description" formControlName="description"
+        placeholder="description" style="width: 100%;min-height: 150px;">
+    </textarea>
+    <p *ngIf="form.get('description')?.invalid && (form.get('description')?.dirty || form.get('description')?.touched)">
+        Porfavor selecciona la descripción</p>
+    <br>
+    <label for="status"></label>
+    <select id="status" autocomplete="status" formControlName="status" placeholder="status">
+        <option value="">Selectione el status porfavor</option>
+        <ng-container *ngFor="let status of statusList">
+            <option [value]="status">{{ status }}</option>
+        </ng-container>
+    </select>
+    <p *ngIf="form.get('status')?.invalid && (form.get('status')?.dirty || form.get('status')?.touched)">Por favor selectiona un estado</p>
+    <br>
+    <ng-container *ngIf="resourceType === resourceTypeEnum.SUBTOPIC">
+        <label for="topic"></label>
+        <select id="topic" autocomplete="topic" formControlName="topic" placeholder="topics">
+            <option value="">Selectione el status porfavor</option>
+            <ng-container *ngFor="let topic of topics">
+                <option [value]="topic._id">{{ topic.name }}</option>
+            </ng-container>
+        </select>
+        <p *ngIf="form.get('topic')?.invalid && (form.get('topic')?.dirty || form.get('topic')?.touched)">Por favor selectiona el tema</p>
+        <br>
+    </ng-container>
+    <label for="file"></label>
+    <input type="file" id="file" autocomplete="file" formControlName="file"
+        placeholder="file" (change)="onFileChange($event)">
+    <p *ngIf="form.get('file')?.invalid && (form.get('file')?.dirty || form.get('file')?.touched)">
+        Porfavor selecciona la descripción</p>
+    <br>
+    <button class="ui-form_button-action button" (click)="validate()">
+        <span class="button_label">
+            Registrar
+        </span>
+    </button>
+</form>

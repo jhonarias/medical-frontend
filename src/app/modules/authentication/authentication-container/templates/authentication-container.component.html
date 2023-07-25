@@ -1,0 +1,8 @@
+<ng-container [ngSwitch]="formType">
+    <ng-container *ngSwitchCase="formTypeEnum.LOGIN">
+        <login-form></login-form>
+    </ng-container>
+    <ng-container *ngSwitchDefault>
+        <register-form></register-form>
+    </ng-container>
+</ng-container>

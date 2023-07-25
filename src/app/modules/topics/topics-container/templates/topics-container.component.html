@@ -1,0 +1,21 @@
+<br>
+<a routerLink="topic-create">Crear tema</a>
+<br>
+<a routerLink="subtopic-create">Crear subtema</a>
+<ul>
+    <ng-container *ngFor="let topic of topicData">
+        <li>
+            <a [routerLink]="'topic-show/'+ topic._id">{{ topic.name }}</a>
+            
+            <p>{{ topic.description }}</p>
+            <ul>
+                <ng-container *ngFor="let subtopic of topic.subtopics">
+                    <li>
+                        <a [routerLink]="'subtopic-show/'+ subtopic._id">{{ subtopic.name }}</a>
+                        <p>{{ subtopic.description }}</p>
+                    </li>
+                </ng-container>
+            </ul>
+        </li>
+    </ng-container>
+</ul>

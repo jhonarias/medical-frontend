@@ -1,0 +1,61 @@
+<ng-container *ngIf="topic">
+    <h1>
+        Tema: {{ topic.name }}
+    </h1>
+
+    <p>{{ topic.description }}</p>
+
+    <span>{{ topic.createdAt | date: 'dd/MM/yyyy' }}</span>
+    <br>
+
+    <img [src]="topic.files" alt="" style="width: 400px; object-fit: cover;">
+    <br>
+
+    <br>
+    <button (click)="generateQuestions()">Generar preguntas</button>
+    <br>
+    <button (click)="detete()">Eliminar</button>
+    <br>
+    <button (click)="edit()">Actualizar</button>
+
+    <ng-container *ngIf="topic.subtopics.length">
+        <h2>Subtemas</h2>
+        <ul>
+            <ng-container *ngFor="let subtopic of topic.subtopics">
+                <li>
+                    <a [routerLink]="'/topics/subtopic-show/'+ subtopic._id">{{ subtopic.name }}</a>
+                    <p>{{ subtopic.description }}</p>
+                </li>
+            </ng-container>
+        </ul>
+    </ng-container>
+</ng-container>
+
+<ng-container *ngIf="subtopic">
+    <h1>
+        Subtema: {{ subtopic.name }}
+    </h1>
+
+    <p>{{ subtopic.description }}</p>
+
+    <span>{{ subtopic.createdAt | date: 'dd/MM/yyyy' }}</span>
+    <br>
+
+    <img [src]="subtopic.files" alt="" style="width: 400px; object-fit: cover;">
+    <br>
+
+    <button (click)="generateQuestions()">Generar preguntas</button>
+    <br>
+    <button (click)="detete()">Eliminar</button>
+    <br>
+    <button (click)="edit()">Actualizar</button>
+
+    <h2>Tema</h2>
+    <ul>
+        <li>
+            <a [routerLink]="'/topics/topic-show/'+ subtopic.topic._id">{{ subtopic.topic.name }}</a>
+            <p>{{ subtopic.topic.description }}</p>
+        </li>
+    </ul>
+
+</ng-container>
