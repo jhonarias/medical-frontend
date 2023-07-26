@@ -1,0 +1,14 @@
+<ng-container *ngIf="question">
+    <h1>
+        Pregunta: {{ question.title }}
+    </h1>
+    
+    <div [innerHtml]="question.description"></div>
+    
+    <span>{{ question.createdAt | date: 'dd/MM/yyyy' }}</span>
+
+    <br>
+    <button (click)="detete()">Eliminar</button>
+    <br>
+    <button (click)="edit()">Actualizar</button>
+</ng-container>

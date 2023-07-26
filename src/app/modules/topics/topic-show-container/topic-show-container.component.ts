@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ResourceType } from '../enums';
-import { TopicsHttpService } from '../../../shared/services/topics-http.service';
-import { QuestionsHttpService } from 'src/app/shared/services/question-http.service';
+import { TopicHttpService } from '../../../shared/services/topic-http.service';
+import { QuestionHttpService } from 'src/app/shared/services/question-http.service';
 import { Subtopic, Topic } from 'src/app/shared/models';
 
 @Component({
@@ -18,8 +18,8 @@ export class TopicShowContainerComponent implements OnInit {
   protected resourceId: string;
 
   constructor(
-    protected topicsHttpService: TopicsHttpService,
-    protected questionsHttpService: QuestionsHttpService,
+    protected topicHttpService: TopicHttpService,
+    protected questionHttpService: QuestionHttpService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -47,7 +47,7 @@ export class TopicShowContainerComponent implements OnInit {
 
   public detete(): void {
     if (window.confirm('¿Estás seguro de que lo desea eliminar?')) {
-      this.topicsHttpService
+      this.topicHttpService
         .deleteResourceById(this.resourceId, this.resourceType)
         .subscribe({
           next: (response) => {
@@ -68,7 +68,7 @@ export class TopicShowContainerComponent implements OnInit {
   }
 
   protected getQuestionsByTopic(): void {
-    this.questionsHttpService.getQuestionsByTopic(this.topic._id).subscribe({
+    this.questionHttpService.getQuestionsByTopic(this.topic._id).subscribe({
       next: (response) => {
         if (!response.data.length) {
           alert('No hay preguntas');
@@ -82,7 +82,7 @@ export class TopicShowContainerComponent implements OnInit {
   }
 
   protected getQuestionsBySubtopic(): void {
-    this.questionsHttpService
+    this.questionHttpService
       .getQuestionsBySubtopic(this.subtopic._id)
       .subscribe({
         next: (response) => {
@@ -108,7 +108,7 @@ export class TopicShowContainerComponent implements OnInit {
   }
 
   protected getResourceById() {
-    this.topicsHttpService
+    this.topicHttpService
       .getResourceById(this.resourceId, this.resourceType)
       .subscribe({
         next: (response) => {

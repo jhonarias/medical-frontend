@@ -1,5 +1,5 @@
-import { Topic } from ".";
+import { Topic } from '.';
 
 export interface Subtopic extends Topic {
-    topic: Topic;
+  topic: Topic;
 }

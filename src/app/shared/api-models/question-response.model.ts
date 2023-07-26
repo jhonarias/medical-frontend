@@ -1,15 +1,15 @@
-import { ApiResponse } from ".";
-import { Question } from "../models";
-import { Answer } from "../models/answer.model";
+import { ApiResponse } from '.';
+import { Question } from '../models';
+import { Answer } from '../models/answer.model';
 
 export interface QuestionResponse extends ApiResponse {
-    data: Question;
+  data: Question;
 }
 
 export interface QuestionDataResponse extends ApiResponse {
-    data: QuestionData[];
+  data: QuestionData[];
 }
 
 export interface QuestionData extends Question {
-    answers: Answer[];
+  answers: Answer[];
 }

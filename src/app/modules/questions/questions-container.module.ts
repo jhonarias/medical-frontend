@@ -3,21 +3,39 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { QuestionsContainerRoutingModule } from './questions-container-routing.module';
 import { QuestionsContainerComponent } from './questions-container/questions-container.component';
-import { QuestionsHttpService } from 'src/app/shared/services/question-http.service';
-import { TopicsHttpService } from 'src/app/shared/services/topics-http.service';
+import { QuestionHttpService } from 'src/app/shared/services/question-http.service';
+import { TopicHttpService } from 'src/app/shared/services/topic-http.service';
+import { QuestionShowContainerComponent } from './question-show-container/question-show-container.component';
+import { QuestionCreateContainerComponent } from './question-create-container/question-create-container.component';
+import { QuestionEditContainerComponent } from './question-edit-container/question-edit-container.component';
 
 @NgModule({
   imports: [CommonModule, ReactiveFormsModule, QuestionsContainerRoutingModule],
-  declarations: [QuestionsContainerComponent],
+  declarations: [
+    QuestionsContainerComponent,
+    QuestionShowContainerComponent,
+    QuestionCreateContainerComponent,
+    QuestionEditContainerComponent,
+  ],
   providers: [
     {
       provide: 'components',
-      useValue: [QuestionsContainerComponent],
+      useValue: [
+        QuestionsContainerComponent,
+        QuestionShowContainerComponent,
+        QuestionCreateContainerComponent,
+        QuestionEditContainerComponent,
+      ],
       multi: true,
     },
-    TopicsHttpService,
-    QuestionsHttpService,
+    TopicHttpService,
+    QuestionHttpService,
   ],
-  exports: [QuestionsContainerComponent],
+  exports: [
+    QuestionsContainerComponent,
+    QuestionShowContainerComponent,
+    QuestionCreateContainerComponent,
+    QuestionEditContainerComponent,
+  ],
 })
 export class QuestionsContainerModule {}

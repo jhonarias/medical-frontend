@@ -1,26 +1,30 @@
 <h1>Preguntas</h1>
+<br>
+<a routerLink="question-create">Crear pregunta</a>
+<br>
 <ul>
     <ng-container *ngFor="let question of questions">
         <li>
             <h2>{{ question.title }}</h2>
-            <div [innerHtml]="question.description"></div>
+            <p>{{ question.description.length > 30 ? (question.description | slice:0:30) + '...' : question.description }}</p>
             <span>{{ question.createdAt | date: 'dd/MM/yyyy' }}</span><br>
             <span>{{ question.status }}</span>
-            <br>
             <br>
             <ng-container *ngIf="question.topic">
                 <h3>Tema:</h3>
                 <a [routerLink]="'/topics/topic-show/'+ question.topic._id">{{ question.topic.name }}</a>
                 <br>
-                <p>{{ question.topic.description }}</p>
+                <!-- <p>{{ question.topic.description.length > 50 ? (question.topic.description | slice:0:50) + '...' : question.topic.description }}</p> -->
             </ng-container>
             <br>
             <ng-container *ngIf="question.subtopic">
                 <h3>Subtema:</h3>
                 <a [routerLink]="'/topics/subtopic-show/'+ question.subtopic._id">{{ question.subtopic.name }}</a>
                 <br>
-                <p>{{ question.subtopic.description }}</p>
+                <!-- <p>{{ question.subtopic.description.length > 50 ? (question.subtopic.description | slice:0:50) + '...' : question.subtopic.description }}</p> -->
             </ng-container>
+            <br>
+            <a [routerLink]="'question-show/'+ question._id">Ver más</a>
         </li>
     </ng-container>
 </ul>

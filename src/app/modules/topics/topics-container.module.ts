@@ -4,9 +4,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TopicsContainerRoutingModule } from './topics-container-routing.module';
 import { TopicsContainerComponent } from './topics-container/topics-container.component';
 import { TopicCreateContainerComponent } from './topic-create-container/topic-create-container.component';
-import { TopicsHttpService } from '../../shared/services/topics-http.service';
+import { TopicHttpService } from '../../shared/services/topic-http.service';
 import { TopicShowContainerComponent } from './topic-show-container/topic-show-container.component';
-import { QuestionsHttpService } from 'src/app/shared/services/question-http.service';
+import { QuestionHttpService } from 'src/app/shared/services/question-http.service';
 import { TopicEditContainerComponent } from './topic-edit-container/topic-edit-container.component';
 
 @NgModule({
@@ -28,8 +28,8 @@ import { TopicEditContainerComponent } from './topic-edit-container/topic-edit-c
       ],
       multi: true,
     },
-    TopicsHttpService,
-    QuestionsHttpService,
+    TopicHttpService,
+    QuestionHttpService,
   ],
   exports: [
     TopicsContainerComponent,

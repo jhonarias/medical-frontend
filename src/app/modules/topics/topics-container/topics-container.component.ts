@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { TopicsHttpService } from '../../../shared/services/topics-http.service';
-import { TopicData } from '../models';
+import { TopicHttpService } from '../../../shared/services/topic-http.service';
+import { TopicData } from 'src/app/shared/api-models';
 
 @Component({
   selector: 'topics-container',
@@ -8,10 +8,9 @@ import { TopicData } from '../models';
   //   styleUrls: ['./auth.component.scss']
 })
 export class TopicsContainerComponent implements OnInit {
-
   public topicData: TopicData[];
 
-  constructor(protected topicsHttpService: TopicsHttpService) {
+  constructor(protected topicHttpService: TopicHttpService) {
     this.topicData = [];
   }
 
@@ -24,7 +23,7 @@ export class TopicsContainerComponent implements OnInit {
   }
 
   protected retrieveTopics() {
-    this.topicsHttpService.retrieveTopics().subscribe({
+    this.topicHttpService.retrieveTopics().subscribe({
       next: (response) => {
         this.topicData = response.data;
       },

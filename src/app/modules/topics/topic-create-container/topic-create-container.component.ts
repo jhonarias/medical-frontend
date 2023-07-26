@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ResourceType, TopicStatus } from '../enums';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { TopicHttpService } from '../../../shared/services/topic-http.service';
+import { Topic } from 'src/app/shared/models';
 import {
   SubtopicRequest,
   SubtopicResponse,
   TopicRequest,
   TopicResponse,
-} from '../models';
-import { TopicsHttpService } from '../../../shared/services/topics-http.service';
-import { Topic } from 'src/app/shared/models';
+} from 'src/app/shared/api-models';
 
 @Component({
   selector: 'topic-create-container',
@@ -26,7 +26,7 @@ export class TopicCreateContainerComponent implements OnInit {
   protected file: string;
 
   constructor(
-    protected topicsHttpService: TopicsHttpService,
+    protected topicHttpService: TopicHttpService,
     private router: Router
   ) {
     this.form = new FormGroup({});
@@ -80,9 +80,9 @@ export class TopicCreateContainerComponent implements OnInit {
 
   protected setResourceType(): void {
     this.resourceType = this.router.url
-    .split('/')
-    .pop()
-    ?.split('-')[0] as ResourceType;
+      .split('/')
+      .pop()
+      ?.split('-')[0] as ResourceType;
   }
 
   protected buildForm(): void {
@@ -100,7 +100,7 @@ export class TopicCreateContainerComponent implements OnInit {
 
   protected retrieveTopics(): void {
     if (this.resourceType === this.resourceTypeEnum.SUBTOPIC) {
-      this.topicsHttpService.retrieveTopics().subscribe({
+      this.topicHttpService.retrieveTopics().subscribe({
         next: (response) => {
           this.topics = response.data;
         },
@@ -121,7 +121,7 @@ export class TopicCreateContainerComponent implements OnInit {
 
   protected register() {
     const request = this.buildRequest();
-    this.topicsHttpService
+    this.topicHttpService
       .registerResource(request, this.resourceType)
       .subscribe({
         next: (response) => {

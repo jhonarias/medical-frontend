@@ -2,18 +2,18 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/app/environments/environment';
 import { HttpClientService } from 'src/app/shared/services/http-client.service';
+import { Observable } from 'rxjs';
+import { ResourceType } from '../../modules/topics/enums';
 import {
   SubtopicRequest,
   SubtopicResponse,
   TopicDataResponse,
   TopicRequest,
   TopicResponse,
-} from '../../modules/topics/models';
-import { Observable } from 'rxjs';
-import { ResourceType } from '../../modules/topics/enums';
+} from '../api-models';
 
 @Injectable()
-export class TopicsHttpService extends HttpClientService {
+export class TopicHttpService extends HttpClientService {
   constructor(protected override httpClient: HttpClient) {
     super(httpClient);
   }
@@ -56,17 +56,19 @@ export class TopicsHttpService extends HttpClientService {
   }
 
   public updateResource(
-    request: TopicRequest | SubtopicRequest | FormData,
+    request: TopicRequest | SubtopicRequest,
     resourceType: ResourceType,
-    id: string,
+    id: string
   ): Observable<TopicResponse | SubtopicResponse> {
     return this.put<
-      TopicRequest | SubtopicRequest | FormData,
+      TopicRequest | SubtopicRequest,
       TopicResponse | SubtopicResponse
     >(
       (resourceType === ResourceType.TOPIC
         ? environment.apiURLTopic
-        : environment.apiURLSubtopic) + '/'+ id,
+        : environment.apiURLSubtopic) +
+        '/' +
+        id,
       '',
       request
     );
@@ -76,13 +78,12 @@ export class TopicsHttpService extends HttpClientService {
     id: string,
     resourceType: ResourceType
   ): Observable<TopicResponse | SubtopicResponse> {
-    return this.delete<
-      any,
-      TopicResponse | SubtopicResponse
-    >(
+    return this.delete<any, TopicResponse | SubtopicResponse>(
       (resourceType === ResourceType.TOPIC
         ? environment.apiURLTopic
-        : environment.apiURLSubtopic) + '/'+id,
+        : environment.apiURLSubtopic) +
+        '/' +
+        id,
       ''
     );
   }

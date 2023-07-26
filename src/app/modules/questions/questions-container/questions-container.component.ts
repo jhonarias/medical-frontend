@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Question } from 'src/app/shared/models';
-import { QuestionsHttpService } from 'src/app/shared/services/question-http.service';
+import { QuestionHttpService } from 'src/app/shared/services/question-http.service';
 
 @Component({
   selector: 'questions-container',
@@ -8,13 +8,12 @@ import { QuestionsHttpService } from 'src/app/shared/services/question-http.serv
   //   styleUrls: ['./auth.component.scss']
 })
 export class QuestionsContainerComponent implements OnInit {
-
   public questions: Question[];
 
-  constructor(protected questionsHttpService: QuestionsHttpService) {
+  constructor(protected questionHttpService: QuestionHttpService) {
     this.questions = [];
   }
-  
+
   ngOnInit(): void {
     this.internalInit();
   }
@@ -24,11 +23,11 @@ export class QuestionsContainerComponent implements OnInit {
   }
 
   protected retrieveQuestions(): void {
-    this.questionsHttpService.retrieveQuestions().subscribe({
+    this.questionHttpService.retrieveQuestions().subscribe({
       next: (response) => {
         this.questions = response.data;
       },
-      error: (err) => {}
+      error: (err) => {},
     });
   }
 }

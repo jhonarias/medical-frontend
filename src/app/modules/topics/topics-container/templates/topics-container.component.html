@@ -7,12 +7,12 @@
         <li>
             <a [routerLink]="'topic-show/'+ topic._id">{{ topic.name }}</a>
             
-            <p>{{ topic.description }}</p>
+            <p>{{ topic.description.length > 50 ? (topic.description | slice:0:50) + '...' : topic.description }}</p>
             <ul>
                 <ng-container *ngFor="let subtopic of topic.subtopics">
                     <li>
                         <a [routerLink]="'subtopic-show/'+ subtopic._id">{{ subtopic.name }}</a>
-                        <p>{{ subtopic.description }}</p>
+                        <p>{{ subtopic.description.length > 50 ? (subtopic.description | slice:0:50) + '...' : subtopic.description }}</p>
                     </li>
                 </ng-container>
             </ul>

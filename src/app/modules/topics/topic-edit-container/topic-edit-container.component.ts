@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ResourceType, TopicStatus } from '../enums';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subtopic, Topic } from 'src/app/shared/models';
-import { TopicsHttpService } from '../../../shared/services/topics-http.service';
+import { TopicHttpService } from '../../../shared/services/topic-http.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { SubtopicRequest, TopicRequest } from '../models';
+import { SubtopicRequest, TopicRequest } from 'src/app/shared/api-models';
 
 @Component({
   selector: 'topic-edit-container',
@@ -24,7 +24,7 @@ export class TopicEditContainerComponent implements OnInit {
   protected file: string;
 
   constructor(
-    protected topicsHttpService: TopicsHttpService,
+    protected topicHttpService: TopicHttpService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -96,7 +96,7 @@ export class TopicEditContainerComponent implements OnInit {
   }
 
   protected getResourceById() {
-    this.topicsHttpService
+    this.topicHttpService
       .getResourceById(this.resourceId, this.resourceType)
       .subscribe({
         next: (response) => {
@@ -116,7 +116,7 @@ export class TopicEditContainerComponent implements OnInit {
 
   protected retrieveTopics(): void {
     if (this.resourceType === this.resourceTypeEnum.SUBTOPIC) {
-      this.topicsHttpService.retrieveTopics().subscribe({
+      this.topicHttpService.retrieveTopics().subscribe({
         next: (response) => {
           this.topics = response.data;
         },
@@ -150,7 +150,7 @@ export class TopicEditContainerComponent implements OnInit {
     }
   }
 
-  protected buildRequest(): TopicRequest | SubtopicRequest | FormData {
+  protected buildRequest(): TopicRequest | SubtopicRequest {
     const form = this.form.value;
     return {
       ...form,
@@ -160,7 +160,7 @@ export class TopicEditContainerComponent implements OnInit {
 
   protected update() {
     const request = this.buildRequest();
-    this.topicsHttpService
+    this.topicHttpService
       .updateResource(request, this.resourceType, this.resourceId)
       .subscribe({
         next: (response) => {

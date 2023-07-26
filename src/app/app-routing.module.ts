@@ -71,6 +71,20 @@ const routes: Routes = [
         (m) => m.QuestionsContainerModule
       ),
   },
+  {
+    path: 'question-create',
+    loadChildren: () =>
+      import('./modules/questions/questions-container.module').then(
+        (m) => m.QuestionsContainerModule
+      ),
+  },
+  {
+    path: 'question-show/:id',
+    loadChildren: () =>
+      import('./modules/questions/questions-container.module').then(
+        (m) => m.QuestionsContainerModule
+      ),
+  },
 ];
 
 @NgModule({
