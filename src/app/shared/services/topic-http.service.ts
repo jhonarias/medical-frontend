@@ -5,6 +5,7 @@ import { HttpClientService } from 'src/app/shared/services/http-client.service';
 import { Observable } from 'rxjs';
 import { ResourceType } from '../../modules/topics/enums';
 import {
+  SubTopicDataResponse,
   SubtopicRequest,
   SubtopicResponse,
   TopicDataResponse,
@@ -18,13 +19,12 @@ export class TopicHttpService extends HttpClientService {
     super(httpClient);
   }
 
-  /**
-   * Send a request for register a user
-   * @param request Data to query through API
-   * @returns response observable resource
-   */
   public retrieveTopics(): Observable<TopicDataResponse> {
     return this.get(environment.apiURLTopic, '');
+  }
+
+  public retrieveSubTopics(): Observable<SubTopicDataResponse> {
+    return this.get(environment.apiURLSubtopic, '');
   }
 
   public getResourceById(

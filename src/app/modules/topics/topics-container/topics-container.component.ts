@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TopicHttpService } from '../../../shared/services/topic-http.service';
-import { TopicData } from 'src/app/shared/api-models';
+import { Topic } from 'src/app/shared/models';
 
 @Component({
   selector: 'topics-container',
@@ -8,7 +8,7 @@ import { TopicData } from 'src/app/shared/api-models';
   //   styleUrls: ['./auth.component.scss']
 })
 export class TopicsContainerComponent implements OnInit {
-  public topicData: TopicData[];
+  public topicData: Topic[];
 
   constructor(protected topicHttpService: TopicHttpService) {
     this.topicData = [];

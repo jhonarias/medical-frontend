@@ -1,1 +1,50 @@
-create
+<h1>Crear Pregunta</h1>
+<form [formGroup]="form">
+    <label for="title">Titulo</label>
+    <input type="text" id="title" formControlName="title" placeholder="title">
+    <p *ngIf="form.get('title')?.invalid && (form.get('title')?.dirty || form.get('title')?.touched)">Por favor rellena
+        el titulo</p>
+    <br>
+    <label for="description">Descripción</label>
+    <textarea id="description" autocomplete="description" formControlName="description" placeholder="description"
+        style="width: 100%;min-height: 150px;">
+    </textarea>
+    <p *ngIf="form.get('description')?.invalid && (form.get('description')?.dirty || form.get('description')?.touched)">
+        Porfavor rellena la descripción</p>
+    <br>
+    <label for="status">Estado</label>
+    <select id="status" autocomplete="status" formControlName="status" placeholder="status">
+        <option value="">Selectione el status porfavor</option>
+        <ng-container *ngFor="let status of statusList">
+            <option [value]="status">{{ status }}</option>
+        </ng-container>
+    </select>
+    <p *ngIf="form.get('status')?.invalid && (form.get('status')?.dirty || form.get('status')?.touched)">Por favor
+        selectiona un estado</p>
+    <br>
+    <p>Debe seleccionar por lo menos un tema o subtema</p>
+    <br>
+    <label for="topic">Tema</label>
+    <select id="topic" autocomplete="topic" formControlName="topic" placeholder="topic">
+        <option value="">Seleccionar tema</option>
+        <ng-container *ngFor="let topic of topics">
+            <option [value]="topic._id">{{ topic.name }}</option>
+        </ng-container>
+    </select>
+
+    <br>
+    <label for="subtopic">Subtema</label>
+    <select id="subtopic" autocomplete="subtopic" formControlName="subtopic" placeholder="subtopic">
+        <option value="">Seleccionar subtema</option>
+        <ng-container *ngFor="let subtopic of subtopics">
+            <option [value]="subtopic._id">{{ subtopic.name }}</option>
+        </ng-container>
+    </select>
+    <br>
+
+    <button class="ui-form_button-action button" (click)="validate()">
+        <span class="button_label">
+            Registrar
+        </span>
+    </button>
+</form>

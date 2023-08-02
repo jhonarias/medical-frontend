@@ -36,6 +36,14 @@ export class QuestionHttpService extends HttpClientService {
     );
   }
 
+  public createQuestion(request: QuestionRequest) {
+    return this.post<QuestionRequest, QuestionResponse>(
+      environment.apiURLQuestion,
+      '',
+      request
+    );
+  }
+
   public deleteQuestion(id: string) {
     return this.delete<any, QuestionResponse>(
       environment.apiURLQuestion + '/' + id,

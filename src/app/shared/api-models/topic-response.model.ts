@@ -10,9 +10,9 @@ export interface SubtopicResponse extends ApiResponse {
 }
 
 export interface TopicDataResponse extends ApiResponse {
-  data: TopicData[];
+  data: Topic[];
 }
 
-export interface TopicData extends Topic {
-  subtopics: Subtopic[];
+export interface SubTopicDataResponse extends ApiResponse {
+  data: Subtopic[];
 }
