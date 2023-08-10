@@ -1,0 +1,19 @@
+<form [formGroup]="form">
+    <label for="title">Titulo</label>
+    <input type="text" id="title" formControlName="title" placeholder="Titulo">
+    <p *ngIf="form.get('title')?.invalid && (form.get('title')?.dirty || form.get('title')?.touched)">Por favor ingresa el titulo</p>
+    <br>
+    <label for="description">Descripcion</label>
+    <textarea type="text" id="description" formControlName="description" placeholder="Descripción" style="width: 100%;min-height: 150px;"></textarea>
+    <p *ngIf="form.get('description')?.invalid && (form.get('description')?.dirty || form.get('description')?.touched)">Por favor ingresa la descripción</p>
+    <br>
+    <label for="isCorrect" class="">Marca como correcta</label>
+    <input type="checkbox" formControlName="isCorrect" id="isCorrect"/>
+    <br>
+    <label for="status">Estado</label>
+    <select id="status" autocomplete="status" formControlName="status" placeholder="status">
+        <ng-container *ngFor="let status of statusList">
+            <option [value]="status">{{ status }}</option>
+        </ng-container>
+    </select>
+</form>

@@ -85,6 +85,27 @@ const routes: Routes = [
         (m) => m.QuestionsContainerModule
       ),
   },
+  {
+    path: 'answers',
+    loadChildren: () =>
+      import('./modules/answers/answers-container.module').then(
+        (m) => m.AnswersContainerModule
+      ),
+  },
+  {
+    path: 'answers-create',
+    loadChildren: () =>
+      import('./modules/answers/answers-container.module').then(
+        (m) => m.AnswersContainerModule
+      ),
+  },
+  {
+    path: 'answers-create/:questionId',
+    loadChildren: () =>
+      import('./modules/answers/answers-container.module').then(
+        (m) => m.AnswersContainerModule
+      ),
+  },
 ];
 
 @NgModule({

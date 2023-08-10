@@ -7,7 +7,7 @@ export interface Answer {
     description: string;
     isCorrect: boolean;
     status: AnswerStatus;
-    question: Question;
+    question: Question | string;
     createdAt: Date;
     updatedAt: Date;
 }

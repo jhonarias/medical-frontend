@@ -27,6 +27,10 @@ export class QuestionShowContainerComponent implements OnInit {
   }
 
   protected internalInit(): void {
+    this.subscribeToParams();
+  }
+
+  protected subscribeToParams(): void {
     this.route.params.subscribe((params) => {
       this.questionId = params['id'];
       this.getQuestionById();

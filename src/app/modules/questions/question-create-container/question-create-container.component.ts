@@ -119,7 +119,7 @@ export class QuestionCreateContainerComponent implements OnInit {
         this.handleRegisterSuccess(response);
       },
       error: (err) => {
-        console.log('err', err);
+        console.error('err', err);
       },
     });
   }

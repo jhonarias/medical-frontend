@@ -1,0 +1,25 @@
+<ng-container *ngIf="questionId; else noQuestionId">
+    <h1>Crear respuesta de la pregunta {{ questionId }}</h1>
+</ng-container>
+
+<ng-template #noQuestionId>
+    <h1>Crear respuesta</h1>
+</ng-template>
+
+<ng-container *ngIf="forms && forms.controls.length">
+    <ng-container *ngFor="let form of forms.controls; let index = index">
+        <br>
+        <answer-create-form [form]="form" [statusList]="statusList"></answer-create-form>
+        <button (click)="deleteForm(index)">Eliminar</button>
+        <br>
+    </ng-container>
+    <br>
+    <button (click)="addForm()">Agregar respuesta</button>
+    <br>
+    <br>
+    <button class="ui-form_button-action button" (click)="validate()">
+        <span class="button_label">
+            Guardar
+        </span>
+    </button>
+</ng-container>
