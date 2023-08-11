@@ -1,8 +1,28 @@
-<br>
-<a routerLink="topic-create">Crear tema</a>
-<br>
-<a routerLink="subtopic-create">Crear subtema</a>
-<ul>
+<div class="mb-3">
+    <a routerLink="topic-create" class="btn btn-primary">Crear tema</a>
+</div>
+<div class="mb-3">
+    <a routerLink="subtopic-create" class="btn btn-light">Crear subtema</a>
+</div>
+<div class="list-group">
+    <ng-container *ngFor="let topic of topicData">
+        <a [routerLink]="'topic-show/'+ topic._id" class="list-group-item list-group-item-action active" aria-current="true">
+            <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{ topic.name }}</h5>
+            </div>
+            <p class="mb-1">{{ topic.description.length > 50 ? (topic.description | slice:0:50) + '...' : topic.description }}</p>
+        </a>
+        <ng-container *ngFor="let subtopic of topic.subtopics">
+            <a [routerLink]="'subtopic-show/'+ subtopic._id" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">{{ subtopic.name }}</h5>
+                </div>
+                <p class="mb-1">{{ subtopic.description.length > 50 ? (subtopic.description | slice:0:50) + '...' : subtopic.description }}</p>
+            </a>
+        </ng-container>
+    </ng-container>
+</div>
+<!-- <ul>
     <ng-container *ngFor="let topic of topicData">
         <li>
             <a [routerLink]="'topic-show/'+ topic._id">{{ topic.name }}</a>
@@ -18,4 +38,4 @@
             </ul>
         </li>
     </ng-container>
-</ul>
+</ul> -->

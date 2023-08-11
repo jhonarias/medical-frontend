@@ -26,7 +26,7 @@ export class RegisterFormComponent implements OnInit {
     if (this.form.valid) {
       this.register();
     } else {
-      alert('form invalid');
+      alert('Llena los datos');
     }
   }
 

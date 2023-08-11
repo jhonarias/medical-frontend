@@ -50,10 +50,9 @@ export class LoginFormComponent implements OnInit {
 
   public validate(): void {
     if (this.form.valid) {
-      console.log(this.form.value);
       this.login();
     } else {
-      alert('form invalid');
+      alert('Ingresa los datos');
     }
   }
 
@@ -78,7 +77,7 @@ export class LoginFormComponent implements OnInit {
         this.handleLoginSuccess(response);
       },
       error: (err) => {
-        alert(err.error.error);
+        alert('Datos incorrectos');
         console.log('err', err);
       },
     });

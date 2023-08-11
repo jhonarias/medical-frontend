@@ -1,26 +1,48 @@
-<nav>
-  <li>
-    <a routerLink="home" routerLinkActive="active">Home</a>
-  </li>
-  <li>
-    <a routerLink="register" routerLinkActive="active">registro</a>
-  </li>
-  <ng-container *ngIf="!isAthenticated">
-    <li>
-      <a routerLink="login" routerLinkActive="active">login</a>
-    </li>
-  </ng-container>
-  <ng-container *ngIf="isAthenticated">
-    <li>
-      <a routerLink="topics" routerLinkActive="active">Temas</a>
-    </li>
-    <li>
-      <a routerLink="questions" routerLinkActive="active">Preguntas</a>
-    </li>
-    <li>
-      <button (click)="logout()">Logout</button>
-    </li>
-    <li>Hola: {{ user.username }}</li>
-  </ng-container>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container">
+    <a class="navbar-brand"routerLink="home">JFAV</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" routerLink="home" routerLinkActive="active">Home</a>
+        </li>
+        <ng-container *ngIf="isAthenticated">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="topics" routerLinkActive="active">Temas</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="questions" routerLinkActive="active">Preguntas</a>
+          </li>
+          
+        </ng-container>
+      </ul>
+      <ul class="navbar-nav flex-row flex-wrap ms-md-auto">
+        <li class="nav-item">
+          <a class="btn btn-info me-2" routerLink="register" routerLinkActive="active">Registro</a>
+        </li>
+        <ng-container *ngIf="!isAthenticated">
+          <li class="nav-item">
+            <a class="btn btn-danger" routerLink="login" routerLinkActive="active">Login</a>
+          </li>
+        </ng-container>
+        <ng-container *ngIf="isAthenticated">
+          <li class="nav-item">
+            <button class="btn btn-outline-danger me-2" (click)="logout()">Logout</button>
+          </li>
+        </ng-container>
+      </ul>
+      <ng-container *ngIf="isAthenticated">
+        <span class="navbar-text">
+          Hola: {{ user.username }}
+        </span>
+      </ng-container>
+    </div>
+  </div>
 </nav>
-<router-outlet></router-outlet>
+
+<div class="container mt-3">
+  <router-outlet></router-outlet>
+</div>
