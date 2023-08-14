@@ -1,16 +1,38 @@
 <ng-container *ngIf="question">
-    <h1>
-        Pregunta: {{ question.title }}
-    </h1>
-    
-    <div [innerHtml]="question.description"></div>
-    
-    <span>{{ question.createdAt | date: 'dd/MM/yyyy' }}</span>
-
-    <br>
-    <button (click)="detete()">Eliminar</button>
-    <br>
-    <button (click)="edit()">Actualizar</button>
-    <br>
-    <a [routerLink]="'/answers/answers-create/'+ question._id">Crear respuestas</a>
+    <div class="row">
+        <div class="col-12 col-sm-8">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title">{{ question.title }}</h1>
+                    <p class="card-text" [innerHtml]="question.description"></p>
+                    <div class="mb-3">
+                        <button (click)="detete()" class="btn btn-danger">Eliminar</button>
+                    </div>
+                    <div class="mb-3">
+                        <button (click)="edit()" class="btn btn-warning">Actualizar</button>
+                    </div>
+                    <div class="mb-3">
+                        <a [routerLink]="'/answers/answers-create/'+ question._id" class="btn btn-primary">Crear respuestas</a>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <small class="text-body-secondary">Creado el: {{ question.createdAt | date: 'dd/MM/yyyy' }} y </small>
+                    <small class="text-body-secondary">actualizado el: {{ question.updatedAt | date: 'dd/MM/yyyy' }}</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-4">         
+            <ng-container *ngIf="question.answers.length">
+                <h2>Respuestas</h2>
+                <ol>
+                    <ng-container *ngFor="let answer of question.answers">
+                        <li>
+                            <a [routerLink]="'/answers/answer-show/'+ answer._id">{{ answer.title }}</a>
+                            <p>{{ answer.description }}</p>
+                        </li>
+                    </ng-container>
+                </ol>
+            </ng-container>
+        </div>
+    </div>
 </ng-container>

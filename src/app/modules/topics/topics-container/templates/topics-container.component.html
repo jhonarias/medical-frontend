@@ -8,10 +8,16 @@
     <ng-container *ngFor="let topic of topicData">
         <a [routerLink]="'topic-show/'+ topic._id" class="list-group-item list-group-item-action active" aria-current="true">
             <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">{{ topic.name }}</h5>
+            <h5 class="mb-1">Tema: {{ topic.name }}</h5>
             </div>
             <p class="mb-1">{{ topic.description.length > 50 ? (topic.description | slice:0:50) + '...' : topic.description }}</p>
         </a>
+        <div class="list-group-item list-group-item-action">
+            <ng-container *ngIf="topic.subtopics.length; else noSubtopics">
+                <h6>Subtemas</h6>
+            </ng-container>
+            <ng-template #noSubtopics><h6>No hay subtemas</h6></ng-template>
+        </div>
         <ng-container *ngFor="let subtopic of topic.subtopics">
             <a [routerLink]="'subtopic-show/'+ subtopic._id" class="list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-between">
@@ -22,20 +28,3 @@
         </ng-container>
     </ng-container>
 </div>
-<!-- <ul>
-    <ng-container *ngFor="let topic of topicData">
-        <li>
-            <a [routerLink]="'topic-show/'+ topic._id">{{ topic.name }}</a>
-            
-            <p>{{ topic.description.length > 50 ? (topic.description | slice:0:50) + '...' : topic.description }}</p>
-            <ul>
-                <ng-container *ngFor="let subtopic of topic.subtopics">
-                    <li>
-                        <a [routerLink]="'subtopic-show/'+ subtopic._id">{{ subtopic.name }}</a>
-                        <p>{{ subtopic.description.length > 50 ? (subtopic.description | slice:0:50) + '...' : subtopic.description }}</p>
-                    </li>
-                </ng-container>
-            </ul>
-        </li>
-    </ng-container>
-</ul> -->

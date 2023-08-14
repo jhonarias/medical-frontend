@@ -1,4 +1,4 @@
-import { Subtopic, Topic } from ".";
+import { Answer, Subtopic, Topic } from ".";
 import { QuestionStatus } from "../enums";
 
 export interface Question {
@@ -6,6 +6,7 @@ export interface Question {
     title: string;
     description: string;
     status: QuestionStatus;
+    answers: Answer[];
     topic: Topic;
     subtopic: Subtopic;
     createdAt: Date;

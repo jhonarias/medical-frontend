@@ -1,19 +1,29 @@
-<form [formGroup]="form">
-    <label for="title">Titulo</label>
-    <input type="text" id="title" formControlName="title" placeholder="Titulo">
-    <p *ngIf="form.get('title')?.invalid && (form.get('title')?.dirty || form.get('title')?.touched)">Por favor ingresa el titulo</p>
-    <br>
-    <label for="description">Descripcion</label>
-    <textarea type="text" id="description" formControlName="description" placeholder="Descripción" style="width: 100%;min-height: 150px;"></textarea>
-    <p *ngIf="form.get('description')?.invalid && (form.get('description')?.dirty || form.get('description')?.touched)">Por favor ingresa la descripción</p>
-    <br>
-    <label for="isCorrect" class="">Marca como correcta</label>
-    <input type="checkbox" formControlName="isCorrect" id="isCorrect"/>
-    <br>
-    <label for="status">Estado</label>
-    <select id="status" autocomplete="status" formControlName="status" placeholder="status">
-        <ng-container *ngFor="let status of statusList">
-            <option [value]="status">{{ status }}</option>
-        </ng-container>
-    </select>
+<form [formGroup]="form" class="row">
+    <div class="col-12 mb-3">
+        <label for="title" class="form-label">Título</label>
+        <input type="text" id="title" formControlName="title" placeholder="Título" class="form-control">
+        <p *ngIf="form.get('title')?.invalid && (form.get('title')?.dirty || form.get('title')?.touched)"
+            class="text-danger">Ingresa el titulo</p>
+    </div>
+    <div class="col-12 mb-3">
+        <label for="description" class="form-label">Descripción</label>
+        <textarea type="text" id="description" formControlName="description" placeholder="Descripción" class="form-control"></textarea>
+        <p *ngIf="form.get('description')?.invalid && (form.get('description')?.dirty || form.get('description')?.touched)"
+            class="text-danger">Ingresa la descripción</p>
+    </div>
+    <div class="col-12 mb-3">
+        <div class="form-check">
+            <input type="checkbox" formControlName="isCorrect" id="isCorrect" class="form-check-input" />
+            <label for="isCorrect" class="form-check-label">Marcar como correcta</label>
+        </div>
+    </div>
+    <div class="col-12 mb-3">
+        <label for="status" class="form-label">Estado</label>
+        <select id="status" autocomplete="status" placeholder="status"
+            formControlName="status" class="form-control">
+            <ng-container *ngFor="let status of statusList">
+                <option [value]="status">{{ status }}</option>
+            </ng-container>
+        </select>
+    </div>
 </form>

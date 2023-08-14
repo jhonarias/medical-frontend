@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ResourceType } from '../enums';
 import { TopicHttpService } from '../../../shared/services/topic-http.service';
 import { QuestionHttpService } from 'src/app/shared/services/question-http.service';
-import { Subtopic, Topic } from 'src/app/shared/models';
+import { Question, Subtopic, Topic } from 'src/app/shared/models';
 
 @Component({
   selector: 'topic-show-container',
@@ -13,6 +13,7 @@ import { Subtopic, Topic } from 'src/app/shared/models';
 export class TopicShowContainerComponent implements OnInit {
   public topic: Topic;
   public subtopic: Subtopic;
+  public questions: Question[];
 
   protected resourceType: ResourceType;
   protected resourceId: string;
@@ -29,6 +30,7 @@ export class TopicShowContainerComponent implements OnInit {
     this.topic = undefined;
     // @ts-ignore
     this.subtopic = undefined;
+    this.questions = [];
   }
 
   ngOnInit(): void {
@@ -73,7 +75,7 @@ export class TopicShowContainerComponent implements OnInit {
         if (!response.data.length) {
           alert('No hay preguntas');
         }
-        console.log('topic', response);
+        this.questions = response.data;
       },
       error: (error) => {
         console.log(error);
@@ -89,7 +91,7 @@ export class TopicShowContainerComponent implements OnInit {
           if (!response.data.length) {
             alert('No hay preguntas');
           }
-          console.log('subtopic', response);
+          this.questions = response.data;
         },
         error: (error) => {
           console.log(error);

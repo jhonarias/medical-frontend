@@ -8,18 +8,20 @@
 
 <ng-container *ngIf="forms && forms.controls.length">
     <ng-container *ngFor="let form of forms.controls; let index = index">
-        <br>
         <answer-create-form [form]="form" [statusList]="statusList"></answer-create-form>
-        <button (click)="deleteForm(index)">Eliminar</button>
-        <br>
+        <div class="mb-3 text-end">
+            <button (click)="deleteForm(index)" class="btn btn-danger">Eliminar</button>
+        </div>
     </ng-container>
-    <br>
-    <button (click)="addForm()">Agregar respuesta</button>
-    <br>
-    <br>
-    <button class="ui-form_button-action button" (click)="validate()">
-        <span class="button_label">
-            Guardar
-        </span>
-    </button>
+    <div class="text-center">
+        <div class="mb-3">
+            <button (click)="addForm()" class="btn btn-warning">Agregar respuesta</button>
+        </div>
+       <button class="btn btn-success" (click)="validate()">
+           <span class="button_label">
+               Guardar
+           </span>
+       </button>
+    </div>
+
 </ng-container>

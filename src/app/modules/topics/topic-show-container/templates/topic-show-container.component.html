@@ -1,5 +1,5 @@
 <ng-container *ngIf="topic">
-    <div class="row">
+    <div class="row mb-3">
         <div class="col-12 col-sm-8">
             <div class="card">
                 <ng-container *ngIf="topic.files">
@@ -41,7 +41,7 @@
 </ng-container>
 
 <ng-container *ngIf="subtopic">
-    <div class="row">
+    <div class="row mb-3">
         <div class="col-12 col-sm-8">
             <div class="card">
                 <ng-container *ngIf="subtopic.files">
@@ -74,6 +74,22 @@
                     <p>{{ subtopic.topic.description.length > 50 ? (subtopic.topic.description | slice:0:50) + '...' : subtopic.topic.description }}</p>
                 </li>
             </ul>
+        </div>
+    </div>
+</ng-container>
+
+<ng-container *ngFor="let question of questions">
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">{{ question.title }}</h5>
+            <p class="card-text">{{ question.description }}</p>
+            <ol>
+                <ng-container *ngFor="let answer of question.answers">
+                    <li>
+                        <p>{{ answer.description }}</p>
+                    </li>
+                </ng-container>
+            </ol>
         </div>
     </div>
 </ng-container>

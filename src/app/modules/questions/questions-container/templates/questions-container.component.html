@@ -5,11 +5,25 @@
     <ng-container *ngFor="let question of questions">
         <a [routerLink]="'question-show/'+ question._id" class="list-group-item list-group-item-action active" aria-current="true">
             <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">{{ question.title }}</h5>
+                <h5 class="mb-1">Pregunta: {{ question.title }}</h5>
             </div>
             <p class="mb-1">{{ question.description.length > 30 ? (question.description | slice:0:30) + '...' :
                 question.description }}</p>
         </a>
+        <div class="list-group-item list-group-item-action">
+            <ng-container *ngIf="question.answers.length; else noAnswers">
+                <h6>Respuestas</h6>
+                <ol>
+                    <ng-container *ngFor="let answer of question.answers">
+                        <li>
+                            <a [routerLink]="'/answers/answer-show/'+ answer._id">{{ answer.title }}</a></li>
+                    </ng-container>
+                </ol>
+            </ng-container>
+            <ng-template #noAnswers>
+                <h6>No hay respuesta</h6>
+            </ng-template>
+        </div>
         <ng-container *ngIf="question.topic">
             <a [routerLink]="'/topics/topic-show/'+ question.topic._id" class="list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-between">
