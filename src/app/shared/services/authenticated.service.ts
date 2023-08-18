@@ -16,7 +16,7 @@ export class AuthenticatedService {
     );
   }
 
-  public isAllowed(roles: UserType[]): boolean {
+  public hasRole(roles: UserType[]): boolean {
     const data = this.authenticationStorageService.getAuthenticationTokenData();
     const userRoles = data.user.role?.split(',');
 

@@ -32,7 +32,6 @@ export class AnswersCreateContainerComponent implements OnInit {
 
   public addForm(): void {
     const form: FormGroup = new FormGroup({
-      title: new FormControl('', [Validators.required]),
       description: new FormControl('', [Validators.required]),
       isCorrect: new FormControl(false, [Validators.required]),
       status: new FormControl(AnswerStatus.ACTIVE, [Validators.required]),
@@ -59,7 +58,7 @@ export class AnswersCreateContainerComponent implements OnInit {
   }
 
   protected subscribeToParams(): void {
-    this.route.params.subscribe((params) => {
+    this.route.queryParams.subscribe((params) => {
       this.questionId = params['questionId'];
     });
   }

@@ -3,7 +3,6 @@
         <div class="col-12 col-sm-8">
             <div class="card">
                 <div class="card-body">
-                    <h1 class="card-title">{{ question.title }}</h1>
                     <p class="card-text" [innerHtml]="question.description"></p>
                     <div class="mb-3">
                         <button (click)="detete()" class="btn btn-danger">Eliminar</button>
@@ -12,7 +11,7 @@
                         <button (click)="edit()" class="btn btn-warning">Actualizar</button>
                     </div>
                     <div class="mb-3">
-                        <a [routerLink]="'/answers/answers-create/'+ question._id" class="btn btn-primary">Crear respuestas</a>
+                        <a [routerLink]="'/answers/answers-create'" [queryParams]="{questionId: question._id}" class="btn btn-primary">Crear respuestas</a>
                     </div>
                 </div>
                 <div class="card-footer">
@@ -27,7 +26,7 @@
                 <ol>
                     <ng-container *ngFor="let answer of question.answers">
                         <li>
-                            <a [routerLink]="'/answers/answer-show/'+ answer._id">{{ answer.title }}</a>
+                            <a [routerLink]="'/answers/answer-show/'+ answer._id">Ver más</a>
                             <p>{{ answer.description }}</p>
                         </li>
                     </ng-container>

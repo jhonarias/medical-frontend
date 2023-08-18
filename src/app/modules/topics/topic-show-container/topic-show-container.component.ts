@@ -4,6 +4,9 @@ import { ResourceType } from '../enums';
 import { TopicHttpService } from '../../../shared/services/topic-http.service';
 import { QuestionHttpService } from 'src/app/shared/services/question-http.service';
 import { Question, Subtopic, Topic } from 'src/app/shared/models';
+import { AuthenticatedService } from '../../../shared/services/authenticated.service';
+import { UserType } from 'src/app/shared/enums';
+import { SubtopicResponse, TopicResponse } from 'src/app/shared/api-models';
 
 @Component({
   selector: 'topic-show-container',
@@ -14,11 +17,13 @@ export class TopicShowContainerComponent implements OnInit {
   public topic: Topic;
   public subtopic: Subtopic;
   public questions: Question[];
+  public isAdmin: boolean;
 
   protected resourceType: ResourceType;
   protected resourceId: string;
 
   constructor(
+    public authenticatedService: AuthenticatedService,
     protected topicHttpService: TopicHttpService,
     protected questionHttpService: QuestionHttpService,
     private router: Router,
@@ -31,6 +36,7 @@ export class TopicShowContainerComponent implements OnInit {
     // @ts-ignore
     this.subtopic = undefined;
     this.questions = [];
+    this.isAdmin = false;
   }
 
   ngOnInit(): void {
@@ -69,6 +75,12 @@ export class TopicShowContainerComponent implements OnInit {
     }
   }
 
+  public createQuestions(): void {
+    this.router.navigate(['/questions/question-create'], {
+      queryParams: { resourceId: this.resourceId, resourceType: this.resourceType }
+    });
+  }
+
   protected getQuestionsByTopic(): void {
     this.questionHttpService.getQuestionsByTopic(this.topic._id).subscribe({
       next: (response) => {
@@ -100,13 +112,32 @@ export class TopicShowContainerComponent implements OnInit {
   }
 
   protected internalInit(): void {
+    this.setIsAdmin();
+    this.setResourceType();
+    this.subscribeToParams();
+  }
+
+  protected setResourceType(): void {
     this.resourceType = this.router.url
-      .split('/')[2]
-      .split('-')[0] as ResourceType;
+    .split('/')[2]
+    .split('-')[0] as ResourceType;
+  }
+
+  protected subscribeToParams(): void {
     this.route.params.subscribe((params) => {
       this.resourceId = params['id'];
       this.getResourceById();
     });
+  }
+
+  protected setIsAdmin(): void {
+    this.isAdmin = this.authenticatedService.hasRole([UserType.ADMIN]);
+  }
+
+  protected handleGenerateQuestions(): void {
+    if (this.isAdmin) {
+      this.generateQuestions();
+    }
   }
 
   protected getResourceById() {
@@ -114,15 +145,20 @@ export class TopicShowContainerComponent implements OnInit {
       .getResourceById(this.resourceId, this.resourceType)
       .subscribe({
         next: (response) => {
-          if (this.resourceType === ResourceType.TOPIC) {
-            this.topic = response.data as Topic;
-          } else {
-            this.subtopic = response.data as Subtopic;
-          }
+          this.handleGetResourceById(response);
+          this.handleGenerateQuestions();
         },
         error: (error) => {
           console.log(error);
         },
       });
+  }
+
+  protected handleGetResourceById(response: TopicResponse | SubtopicResponse): void {
+    if (this.resourceType === ResourceType.TOPIC) {
+      this.topic = response.data as Topic;
+    } else {
+      this.subtopic = response.data as Subtopic;
+    }
   }
 }

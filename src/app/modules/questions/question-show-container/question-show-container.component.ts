@@ -54,7 +54,7 @@ export class QuestionShowContainerComponent implements OnInit {
         .deleteQuestion(this.questionId)
         .subscribe({
           next: (response) => {
-            alert(response.data.title + ' eliminado correctamente');
+            alert(response.data.description + ' eliminado correctamente');
             this.router.navigate(['/questions']);
           },
           error: (err) => console.error(err),

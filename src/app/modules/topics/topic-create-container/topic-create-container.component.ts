@@ -89,7 +89,7 @@ export class TopicCreateContainerComponent implements OnInit {
     this.form = new FormGroup({
       name: new FormControl('', [Validators.required]),
       description: new FormControl('', [Validators.required]),
-      status: new FormControl('', [Validators.required]),
+      status: new FormControl(TopicStatus.OPEN, [Validators.required]),
       file: new FormControl('', [Validators.required]),
     });
 

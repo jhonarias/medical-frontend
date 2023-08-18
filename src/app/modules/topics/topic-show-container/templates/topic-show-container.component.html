@@ -8,15 +8,22 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ topic.name }}</h5>
                     <p class="card-text">{{ topic.description }}</p>
-                    <div class="mb-3">
-                        <button (click)="generateQuestions()" class="btn btn-primary">Generar preguntas</button>
-                    </div>
-                    <div class="mb-3">
-                        <button (click)="detete()" class="btn btn-danger">Eliminar</button>
-                    </div>
-                    <div class="mb-3">
-                        <button (click)="edit()" class="btn btn-warning">Actualizar</button>
-                    </div>
+                    <ng-container *ngIf="!isAdmin">
+                        <div class="mb-3">
+                            <button (click)="generateQuestions()" class="btn btn-primary">Generar preguntas</button>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="isAdmin">
+                        <div class="mb-3">
+                            <button (click)="createQuestions()" class="btn btn-primary">Crear preguntas</button>
+                        </div>
+                        <div class="mb-3">
+                            <button (click)="detete()" class="btn btn-danger">Eliminar</button>
+                        </div>
+                        <div class="mb-3">
+                            <button (click)="edit()" class="btn btn-warning">Actualizar</button>
+                        </div>
+                    </ng-container>
                 </div>
                 <div class="card-footer">
                     <small class="text-body-secondary">Creado el: {{ topic.createdAt | date: 'dd/MM/yyyy' }} y </small>
@@ -50,15 +57,19 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ subtopic.name }}</h5>
                     <p class="card-text">{{ subtopic.description }}</p>
-                    <div class="mb-3">
-                        <button (click)="generateQuestions()" class="btn btn-primary">Generar preguntas</button>
-                    </div>
-                    <div class="mb-3">
-                        <button (click)="detete()" class="btn btn-danger">Eliminar</button>
-                    </div>
-                    <div class="mb-3">
-                        <button (click)="edit()" class="btn btn-warning">Actualizar</button>
-                    </div>
+                    <ng-container *ngIf="!isAdmin">
+                        <div class="mb-3">
+                            <button (click)="generateQuestions()" class="btn btn-primary">Generar preguntas</button>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="isAdmin">
+                        <div class="mb-3">
+                            <button (click)="detete()" class="btn btn-danger">Eliminar</button>
+                        </div>
+                        <div class="mb-3">
+                            <button (click)="edit()" class="btn btn-warning">Actualizar</button>
+                        </div>
+                    </ng-container>
                 </div>
                 <div class="card-footer">
                     <small class="text-body-secondary">Creado el: {{ subtopic.createdAt | date: 'dd/MM/yyyy' }} y </small>
@@ -81,7 +92,6 @@
 <ng-container *ngFor="let question of questions">
     <div class="card mb-3">
         <div class="card-body">
-            <h5 class="card-title">{{ question.title }}</h5>
             <p class="card-text">{{ question.description }}</p>
             <ol>
                 <ng-container *ngFor="let answer of question.answers">

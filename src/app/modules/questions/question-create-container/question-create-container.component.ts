@@ -60,9 +60,8 @@ export class QuestionCreateContainerComponent implements OnInit {
 
   protected buildForm(): void {
     this.form = new FormGroup({
-      title: new FormControl('', [Validators.required]),
       description: new FormControl('', [Validators.required]),
-      status: new FormControl('', [Validators.required]),
+      status: new FormControl(QuestionStatus.ACTIVE, [Validators.required]),
       topic: new FormControl('', []),
       subtopic: new FormControl('', []),
     });
@@ -93,7 +92,6 @@ export class QuestionCreateContainerComponent implements OnInit {
   protected buildRequest(): QuestionRequest {
     const question = this.form.value as Question;
     let request = {
-      title: question.title,
       description: question.description,
       status: question.status,
     } as QuestionRequest;

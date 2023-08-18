@@ -1,12 +1,6 @@
 <h1>Crear Pregunta</h1>
 <form [formGroup]="form" class="row">
     <div class="col-12 mb-3">
-        <label for="title" class="form-label">Título</label>
-        <input type="text" id="title" formControlName="title" placeholder="Título" class="form-control">
-        <p *ngIf="form.get('title')?.invalid && (form.get('title')?.dirty || form.get('title')?.touched)"
-            class="text-danger">Ingresa el titulo</p>
-    </div>
-    <div class="col-12 mb-3">
         <label for="description" class="form-label">Descripción</label>
         <textarea id="description" autocomplete="description" formControlName="description" placeholder="Descripción"
             class="form-control" rows="3">

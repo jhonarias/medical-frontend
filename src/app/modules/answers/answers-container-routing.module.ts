@@ -18,12 +18,6 @@ const routes: Routes = [
     data: { roles: [UserType.ADMIN] },
     canActivate: [AuthGuard],
   },
-  {
-    path: 'answers-create/:questionId',
-    component: AnswersCreateContainerComponent,
-    data: { roles: [UserType.ADMIN] },
-    canActivate: [AuthGuard],
-  },
 ];
 
 @NgModule({

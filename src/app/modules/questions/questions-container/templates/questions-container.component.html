@@ -4,9 +4,6 @@
 <div class="list-group">
     <ng-container *ngFor="let question of questions">
         <a [routerLink]="'question-show/'+ question._id" class="list-group-item list-group-item-action active" aria-current="true">
-            <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">Pregunta: {{ question.title }}</h5>
-            </div>
             <p class="mb-1">{{ question.description.length > 30 ? (question.description | slice:0:30) + '...' :
                 question.description }}</p>
         </a>
@@ -16,7 +13,7 @@
                 <ol>
                     <ng-container *ngFor="let answer of question.answers">
                         <li>
-                            <a [routerLink]="'/answers/answer-show/'+ answer._id">{{ answer.title }}</a></li>
+                            <a [routerLink]="'/answers/answer-show/'+ answer._id">Ver más</a></li>
                     </ng-container>
                 </ol>
             </ng-container>

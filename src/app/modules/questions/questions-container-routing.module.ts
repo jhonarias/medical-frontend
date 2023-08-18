@@ -11,7 +11,7 @@ const routes: Routes = [
   {
     path: '',
     component: QuestionsContainerComponent,
-    data: { roles: [UserType.USER, UserType.ADMIN] },
+    data: { roles: [UserType.ADMIN] },
     canActivate: [AuthGuard],
   },
   {
@@ -23,7 +23,7 @@ const routes: Routes = [
   {
     path: 'question-show/:id',
     component: QuestionShowContainerComponent,
-    data: { roles: [UserType.USER, UserType.ADMIN] },
+    data: { roles: [UserType.ADMIN] },
     canActivate: [AuthGuard],
   },
   {

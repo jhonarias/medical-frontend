@@ -3,6 +3,7 @@ import { AuthenticationStorageService } from './shared/services/authentication-s
 import { AuthenticatedService } from './shared/services/authenticated.service';
 import { User } from './shared/models';
 import { Router } from '@angular/router';
+import { UserType } from './shared/enums';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +13,7 @@ import { Router } from '@angular/router';
 export class AppComponent implements OnInit {
   public isAthenticated: boolean;
   public user: User;
+  public userType = UserType;
 
   constructor(
     protected authenticationStorageService: AuthenticationStorageService,
