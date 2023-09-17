@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ResourceType, TopicStatus } from '../enums';
+import { TopicStatus } from '../enums';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subtopic, Topic } from 'src/app/shared/models';
 import { TopicHttpService } from '../../../shared/services/topic-http.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SubtopicRequest, TopicRequest } from 'src/app/shared/api-models';
+import { ResourceType } from 'src/app/shared/enums';
 
 @Component({
   selector: 'topic-edit-container',
@@ -154,7 +155,7 @@ export class TopicEditContainerComponent implements OnInit {
     const form = this.form.value;
     return {
       ...form,
-      files: this.file,
+      files: this.file ? this.file : this.topic.files,
     };
   }
 

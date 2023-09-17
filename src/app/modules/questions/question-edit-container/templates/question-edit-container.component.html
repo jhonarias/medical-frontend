@@ -1,1 +1,44 @@
-question edit
+<h1>Editar pregunta</h1>
+<form [formGroup]="form" class="row" *ngIf="form?.get('description')">
+    <div class="col-12 mb-3">
+        <label for="description" class="form-label">Descripción</label>
+        <textarea id="description" autocomplete="description" formControlName="description" placeholder="Descripción"
+            class="form-control" rows="3">
+        </textarea>
+        <p *ngIf="form.get('description')?.invalid && (form.get('description')?.dirty || form.get('description')?.touched)"
+            class="text-danger">
+            Ingresa la descripción</p>
+    </div>
+    <div class="col-12 mb-3">
+        <label for="status" class="form-label">Estado</label>
+        <select id="status" autocomplete="status" formControlName="status" placeholder="Estado" class="form-control">
+            <option value="">Selectione el status porfavor</option>
+            <ng-container *ngFor="let status of statusList">
+                <option [value]="status">{{ status }}</option>
+            </ng-container>
+        </select>
+        <p *ngIf="form.get('status')?.invalid && (form.get('status')?.dirty || form.get('status')?.touched)"
+            class="text-danger">Selecciona el estado</p>
+    </div>
+    <div class="col-12 mb-3">
+        <p class="text-primary">Debe seleccionar por lo menos un tema o subtema</p>
+    </div>
+    <div class="col-12 col-sm-6 mb-3">
+        <label for="topic" class="form-label">Tema</label>
+        <select id="topic" autocomplete="topic" formControlName="topic" placeholder="Tema" class="form-control">
+            <option value="">Seleccionar tema</option>
+            <ng-container *ngFor="let topic of topics">
+                <option [value]="topic._id">{{ topic.name }}</option>
+            </ng-container>
+        </select>
+    </div>
+    <div class="col-12 col-sm-6 mb-3">
+        <label for="subtopic" class="form-label">Subtema</label>
+        <select id="subtopic" autocomplete="subtopic" formControlName="subtopic" placeholder="Subtema" class="form-control">
+            <option value="">Seleccionar subtema</option>
+            <ng-container *ngFor="let subtopic of subtopics">
+                <option [value]="subtopic._id">{{ subtopic.name }}</option>
+            </ng-container>
+        </select>
+    </div>
+</form>

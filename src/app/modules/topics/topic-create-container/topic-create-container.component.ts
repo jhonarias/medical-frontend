@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ResourceType, TopicStatus } from '../enums';
+import { TopicStatus } from '../enums';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TopicHttpService } from '../../../shared/services/topic-http.service';
 import { Topic } from 'src/app/shared/models';
@@ -10,6 +10,7 @@ import {
   TopicRequest,
   TopicResponse,
 } from 'src/app/shared/api-models';
+import { ResourceType } from 'src/app/shared/enums';
 
 @Component({
   selector: 'topic-create-container',

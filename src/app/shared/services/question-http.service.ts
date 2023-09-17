@@ -36,11 +36,11 @@ export class QuestionHttpService extends HttpClientService {
     );
   }
 
-  public createQuestion(request: QuestionRequest) {
-    return this.post<QuestionRequest, QuestionResponse>(
+  public createQuestion(requests: QuestionRequest[]) {
+    return this.post<QuestionRequest[], QuestionResponse>(
       environment.apiURLQuestion,
       '',
-      request
+      requests
     );
   }
 

@@ -1,12 +1,20 @@
 import { Component, OnInit } from '@angular/core';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ResourceType } from '../enums';
-import { TopicHttpService } from '../../../shared/services/topic-http.service';
-import { QuestionHttpService } from 'src/app/shared/services/question-http.service';
-import { Question, Subtopic, Topic } from 'src/app/shared/models';
-import { AuthenticatedService } from '../../../shared/services/authenticated.service';
-import { UserType } from 'src/app/shared/enums';
 import { SubtopicResponse, TopicResponse } from 'src/app/shared/api-models';
+import { ResourceType, UserType } from 'src/app/shared/enums';
+import { formGroupHelper } from 'src/app/shared/helpers';
+import { Answer, Question, Subtopic, Topic } from 'src/app/shared/models';
+import { QuestionHttpService } from 'src/app/shared/services/question-http.service';
+import { AuthenticatedService } from '../../../shared/services/authenticated.service';
+import { TopicHttpService } from '../../../shared/services/topic-http.service';
+import { FormQuestion, SummarySolvedQuestion } from '../models';
 
 @Component({
   selector: 'topic-show-container',
@@ -18,6 +26,8 @@ export class TopicShowContainerComponent implements OnInit {
   public subtopic: Subtopic;
   public questions: Question[];
   public isAdmin: boolean;
+  public questionsForm: FormArray;
+  public summarySolvedQuestions: SummarySolvedQuestion[];
 
   protected resourceType: ResourceType;
   protected resourceId: string;
@@ -27,7 +37,8 @@ export class TopicShowContainerComponent implements OnInit {
     protected topicHttpService: TopicHttpService,
     protected questionHttpService: QuestionHttpService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private fb: FormBuilder
   ) {
     this.resourceType = ResourceType.TOPIC;
     this.resourceId = '';
@@ -37,6 +48,9 @@ export class TopicShowContainerComponent implements OnInit {
     this.subtopic = undefined;
     this.questions = [];
     this.isAdmin = false;
+    // @ts-ignore
+    this.questionsForm = new FormArray([]);
+    this.summarySolvedQuestions = [];
   }
 
   ngOnInit(): void {
@@ -69,16 +83,58 @@ export class TopicShowContainerComponent implements OnInit {
 
   public edit(): void {
     if (this.resourceType === ResourceType.TOPIC) {
-      this.router.navigate(['/topics/topic-edit/'+ this.resourceId]);
+      this.router.navigate(['/topics/topic-edit/' + this.resourceId]);
     } else {
-      this.router.navigate(['/topics/subtopic-edit/'+ this.resourceId]);
+      this.router.navigate(['/topics/subtopic-edit/' + this.resourceId]);
     }
   }
 
   public createQuestions(): void {
     this.router.navigate(['/questions/question-create'], {
-      queryParams: { resourceId: this.resourceId, resourceType: this.resourceType }
+      queryParams: {
+        resourceId: this.resourceId,
+        resourceType: this.resourceType,
+      },
     });
+  }
+
+  public validate(): void {
+    formGroupHelper.markFormGroupAsTouched(this.questionsForm);
+    if (this.questionsForm.valid) {
+      this.buildAnswersSummary();
+    }
+  }
+
+  public regenerateQuestions(): void {
+    this.summarySolvedQuestions = [];
+    this.buildQuestionsForm();
+  }
+
+  protected buildAnswersSummary(): void {
+    this.summarySolvedQuestions = [];
+    this.questionsForm.value.forEach((formQuestion: FormQuestion) => {
+      const question = this.questions.find(
+        (question) => question._id === formQuestion._id
+      ) as Question;
+      const selectedAnswer = question?.answers.find(
+        (answer) => answer._id === formQuestion.selectedAnswer
+      ) as Answer;
+      const isQuestionCorrect = question?.answers.some(
+        (answer) =>
+          answer._id === formQuestion.selectedAnswer && answer.isCorrect
+      );
+      this.summarySolvedQuestions.push({
+        question,
+        isCorrect: isQuestionCorrect,
+        selectedAnswer,
+        correctAnswer: question?.answers.find(
+          (answer) => answer.isCorrect
+        ) as Answer,
+      });
+    });
+
+    // @ts-ignore
+    this.questionsForm = new FormArray([]);
   }
 
   protected getQuestionsByTopic(): void {
@@ -88,10 +144,44 @@ export class TopicShowContainerComponent implements OnInit {
           alert('No hay preguntas');
         }
         this.questions = response.data;
+        this.buildQuestionsForm();
       },
       error: (error) => {
-        console.log(error);
+        console.error(error);
       },
+    });
+  }
+
+  protected getOrderQuestionsRandomly() {
+    return this.questions.sort(() => Math.random() - 0.5);
+  }
+
+  protected buildQuestionsForm(): void {
+    // @ts-ignore
+    this.questionsForm = new FormArray([]);
+    const questions = this.getOrderQuestionsRandomly();
+    questions.forEach((question) => {
+      const question_form: FormGroup = new FormGroup({
+        _id: new FormControl(question._id, []),
+        description: new FormControl(question.description, []),
+        selectedAnswer: new FormControl('', [Validators.required]),
+      });
+
+      // @ts-ignore
+      const answers: FormArray = new FormArray([]);
+
+      question.answers.forEach((answer) => {
+        const answer_form: FormGroup = new FormGroup({
+          _id: new FormControl(answer._id, []),
+          description: new FormControl(answer.description, []),
+        });
+
+        answers.push(answer_form);
+      });
+
+      question_form.addControl('answers', answers);
+
+      this.questionsForm.push(question_form);
     });
   }
 
@@ -119,8 +209,8 @@ export class TopicShowContainerComponent implements OnInit {
 
   protected setResourceType(): void {
     this.resourceType = this.router.url
-    .split('/')[2]
-    .split('-')[0] as ResourceType;
+      .split('/')[2]
+      .split('-')[0] as ResourceType;
   }
 
   protected subscribeToParams(): void {
@@ -154,7 +244,9 @@ export class TopicShowContainerComponent implements OnInit {
       });
   }
 
-  protected handleGetResourceById(response: TopicResponse | SubtopicResponse): void {
+  protected handleGetResourceById(
+    response: TopicResponse | SubtopicResponse
+  ): void {
     if (this.resourceType === ResourceType.TOPIC) {
       this.topic = response.data as Topic;
     } else {

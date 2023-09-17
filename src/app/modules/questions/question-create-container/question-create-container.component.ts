@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { QuestionRequest, QuestionResponse } from 'src/app/shared/api-models';
-import { QuestionStatus } from 'src/app/shared/enums';
+import { QuestionStatus, ResourceType } from 'src/app/shared/enums';
 import { Question, Subtopic, Topic } from 'src/app/shared/models';
 import { QuestionHttpService } from 'src/app/shared/services/question-http.service';
 import { TopicHttpService } from 'src/app/shared/services/topic-http.service';
@@ -13,30 +13,54 @@ import { TopicHttpService } from 'src/app/shared/services/topic-http.service';
   //   styleUrls: ['./auth.component.scss']
 })
 export class QuestionCreateContainerComponent implements OnInit {
-  public form: FormGroup;
+  public forms: FormArray;
   public topics: Topic[];
   public subtopics: Subtopic[];
   public statusList: string[];
 
+  public resourceType: ResourceType;
+  public resourceTypeEnum = ResourceType;
+  public resourceId: string;
+
   constructor(
     protected topicHttpService: TopicHttpService,
     protected questionHttpService: QuestionHttpService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
-    this.form = new FormGroup({});
+    // @ts-ignore
+    this.forms = new FormArray([]);
     this.topics = [];
     this.subtopics = [];
     this.statusList = [];
+    this.resourceType = ResourceType.TOPIC;
+    this.resourceId = '';
   }
 
   ngOnInit(): void {
     this.internalInit();
   }
 
+  public addForm(): void {
+    const form = new FormGroup({
+      description: new FormControl('', [Validators.required]),
+      status: new FormControl(QuestionStatus.ACTIVE, [Validators.required]),
+      topic: new FormControl(
+        this.resourceType === ResourceType.TOPIC ? this.resourceId : '',
+        []
+      ),
+      subtopic: new FormControl(
+        this.resourceType === ResourceType.SUBTOPIC ? this.resourceId : '',
+        []
+      ),
+    });
+    this.forms.push(form);
+  }
+
   public validate(): void {
     if (
-      this.form.valid &&
-      (this.form.get('topic')?.value || this.form.get('subtopic')?.value)
+      this.forms.valid
+      // && (this.forms.get('topic')?.value || this.forms.get('subtopic')?.value)
     ) {
       this.register();
     } else {
@@ -45,25 +69,24 @@ export class QuestionCreateContainerComponent implements OnInit {
   }
 
   protected internalInit(): void {
-    this.retrieveTopics();
-    this.retrieveSubTopics();
-    this.setStatusList();
-    this.buildForm();
+    this.subscribeToParams();
+  }
+
+  protected subscribeToParams(): void {
+    this.route.queryParams.subscribe((params) => {
+      this.resourceId = params['resourceId'];
+      this.resourceType = params['resourceType'];
+      this.setStatusList();
+      this.retrieveTopics();
+      this.retrieveSubTopics();
+      this.addForm();
+    });
   }
 
   protected setStatusList(): void {
     this.statusList = [];
     Object.values(QuestionStatus).forEach((status) => {
       this.statusList.push(status);
-    });
-  }
-
-  protected buildForm(): void {
-    this.form = new FormGroup({
-      description: new FormControl('', [Validators.required]),
-      status: new FormControl(QuestionStatus.ACTIVE, [Validators.required]),
-      topic: new FormControl('', []),
-      subtopic: new FormControl('', []),
     });
   }
 
@@ -89,30 +112,32 @@ export class QuestionCreateContainerComponent implements OnInit {
     });
   }
 
-  protected buildRequest(): QuestionRequest {
-    const question = this.form.value as Question;
-    let request = {
-      description: question.description,
-      status: question.status,
-    } as QuestionRequest;
-
-    if (question.topic) {
-      request = {
-        ...request,
-        topic: question.topic,
+  protected buildRequest(): QuestionRequest[] {
+    const questions = this.forms.value as Question[];
+    return questions.map((question) => {
+      let request = {
+        description: question.description,
+        status: question.status,
       } as QuestionRequest;
-    } else if (question.subtopic) {
-      request = {
-        ...request,
-        subtopic: question.subtopic,
-      } as QuestionRequest;
-    }
 
-    return request;
+      if (question.topic) {
+        request = {
+          ...request,
+          topic: question.topic,
+        } as QuestionRequest;
+      } else if (question.subtopic) {
+        request = {
+          ...request,
+          subtopic: question.subtopic,
+        } as QuestionRequest;
+      }
+      return request;
+    });
   }
 
   protected register() {
-    this.questionHttpService.createQuestion(this.buildRequest()).subscribe({
+    const requests = this.buildRequest();
+    this.questionHttpService.createQuestion(requests).subscribe({
       next: (response) => {
         this.handleRegisterSuccess(response);
       },
@@ -123,7 +148,7 @@ export class QuestionCreateContainerComponent implements OnInit {
   }
 
   protected handleRegisterSuccess(response: QuestionResponse) {
-    this.form.reset();
+    this.forms.reset();
     this.router.navigate(['/questions']);
   }
 }

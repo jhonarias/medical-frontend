@@ -8,10 +8,12 @@ import { FormGroup } from '@angular/forms';
 export class AnswerCreateFormComponent implements OnInit {
   @Input() form: FormGroup;
   @Input() statusList: string[];
+  @Input() index: number;
 
   constructor() {
     this.form = new FormGroup({});
     this.statusList = [];
+    this.index = 0;
   }
 
   ngOnInit(): void {}

@@ -45,6 +45,16 @@
         </div>
     </ng-container>
     <div class="col-12 col-sm-6 mb-3">
+        <ng-container *ngIf="topic && topic.files">
+            <small>Imagen del tema</small><br>
+            <img [src]="topic.files" alt="" class="mb-3" style="width: 200px;">
+            <br>
+        </ng-container>
+        <ng-container *ngIf="file">
+            <small>Nueva imagen del tema</small><br>
+            <img [src]="file" alt="" class="mb-3" style="width: 200px;">
+            <br>
+        </ng-container>
         <label for="file" class="form-label">Archivo (imagen o video)</label>
         <input type="file" id="file" autocomplete="file" formControlName="file" placeholder="file"
             (change)="onFileChange($event)" class="form-control">

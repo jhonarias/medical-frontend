@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/app/environments/environment';
 import { HttpClientService } from 'src/app/shared/services/http-client.service';
 import { Observable } from 'rxjs';
-import { ResourceType } from '../../modules/topics/enums';
 import {
   SubTopicDataResponse,
   SubtopicRequest,
@@ -12,6 +11,7 @@ import {
   TopicRequest,
   TopicResponse,
 } from '../api-models';
+import { ResourceType } from '../enums';
 
 @Injectable()
 export class TopicHttpService extends HttpClientService {

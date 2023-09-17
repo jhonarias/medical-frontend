@@ -13,7 +13,7 @@
                 <ol>
                     <ng-container *ngFor="let answer of question.answers">
                         <li>
-                            <a [routerLink]="'/answers/answer-show/'+ answer._id">Ver más</a></li>
+                            <a [routerLink]="'/answers/answer-show/'+ answer._id">{{answer.description}}</a></li>
                     </ng-container>
                 </ol>
             </ng-container>

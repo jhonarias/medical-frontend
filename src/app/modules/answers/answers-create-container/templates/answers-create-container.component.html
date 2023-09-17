@@ -8,7 +8,7 @@
 
 <ng-container *ngIf="forms && forms.controls.length">
     <ng-container *ngFor="let form of forms.controls; let index = index">
-        <answer-create-form [form]="form" [statusList]="statusList"></answer-create-form>
+        <answer-create-form [form]="form" [statusList]="statusList" [index]="index"></answer-create-form>
         <div class="mb-3 text-end">
             <button (click)="deleteForm(index)" class="btn btn-danger">Eliminar</button>
         </div>
