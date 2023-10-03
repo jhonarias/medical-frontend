@@ -1,39 +1,39 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Question } from 'src/app/shared/models';
-import { QuestionHttpService } from 'src/app/shared/services/question-http.service';
+import { Answer } from 'src/app/shared/models';
+import { AnswerHttpService } from 'src/app/shared/services/answer-http.service';
 
 @Component({
-  selector: 'question-show-container',
-  templateUrl: './templates/question-show-container.component.html',
+  selector: 'answer-show-container',
+  templateUrl: './templates/answer-show-container.component.html',
   //   styleUrls: ['./auth.component.scss']
 })
-export class QuestionShowContainerComponent implements OnInit {
-  protected questionId: string;
-  protected question: Question;
+export class AnswerShowContainerComponent implements OnInit {
+  protected answerId: string;
+  protected answer: Answer;
 
   constructor(
-    protected questionHttpService: QuestionHttpService,
+    protected answerHttpService: AnswerHttpService,
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.questionId = '';
+    this.answerId = '';
     // @ts-ignore
-    this.question = undefined;
+    this.answer = undefined;
   }
 
   ngOnInit(): void {
     this.internalInit();
   }
 
-  public detete(): void {
+	public detete(): void {
     if (window.confirm('¿Estás seguro de que la desea eliminar?')) {
-      this.questionHttpService
-        .deleteQuestion(this.questionId)
+      this.answerHttpService
+        .deleteAnswer(this.answerId)
         .subscribe({
           next: (response) => {
             alert(response.data.description + ' eliminado correctamente');
-            this.router.navigate(['/questions']);
+            this.router.navigate(['/answers']);
           },
           error: (err) => console.error(err),
         });
@@ -41,7 +41,7 @@ export class QuestionShowContainerComponent implements OnInit {
   }
 
   public edit(): void {
-    this.router.navigate(['/questions/question-edit/'+ this.questionId]);
+    this.router.navigate(['/answers/answer-edit/'+ this.answerId]);
   }
 
   protected internalInit(): void {
@@ -50,15 +50,15 @@ export class QuestionShowContainerComponent implements OnInit {
 
   protected subscribeToParams(): void {
     this.route.params.subscribe((params) => {
-      this.questionId = params['id'];
+      this.answerId = params['id'];
       this.getQuestionById();
     });
   }
 
-  protected getQuestionById() {
-    this.questionHttpService.getQuestionById(this.questionId).subscribe({
+	protected getQuestionById() {
+    this.answerHttpService.getAnswerById(this.answerId).subscribe({
       next: (response) => {
-        this.question = response.data;
+        this.answer = response.data;
       },
       error: (error) => {
         console.log(error);

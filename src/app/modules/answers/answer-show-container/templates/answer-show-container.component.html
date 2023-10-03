@@ -1,0 +1,40 @@
+<ng-container *ngIf="answer">
+    <div class="row">
+        <div class="col-12 col-sm-8">
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-text" [innerHtml]="answer.description"></p>
+                    <div class="mb-3">
+                        <button (click)="detete()" class="btn btn-danger">Eliminar</button>
+                    </div>
+                    <div class="mb-3">
+                        <button (click)="edit()" class="btn btn-warning">Actualizar</button>
+                    </div>
+                    <ng-container *ngIf="answer.question">
+                        <div class="mb-3">
+                            Pregunta: {{answer.question.description}}
+                        </div>
+                        <div class="mb-3">
+                            <a [routerLink]="'/answers/answers-create'" [queryParams]="{questionId: answer.question._id}" class="btn btn-primary">Crear respuestas</a>
+                        </div>
+                    </ng-container>
+                </div>
+                <div class="card-footer">
+                    <small class="text-body-secondary">Creado el: {{ answer.createdAt | date: 'dd/MM/yyyy' }} y </small>
+                    <small class="text-body-secondary">actualizado el: {{ answer.updatedAt | date: 'dd/MM/yyyy' }}</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-4">         
+            <ng-container *ngIf="answer.question">
+                <h2>Pregunta:</h2>
+                <ol>
+                    <li>
+                        <p>{{ answer.question.description }}</p>
+                        <a [routerLink]="'/questions/question-show/'+ answer.question._id">Ver más</a>
+                    </li>
+                </ol>
+            </ng-container>
+        </div>
+    </div>
+</ng-container>

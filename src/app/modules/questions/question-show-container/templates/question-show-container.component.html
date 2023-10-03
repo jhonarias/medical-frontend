@@ -26,8 +26,12 @@
                 <ol>
                     <ng-container *ngFor="let answer of question.answers">
                         <li>
+                            <p>{{ answer.description.length > 30 ? (answer.description | slice:0:30) + '...' :
+                                answer.description }}</p>
+                            <ng-container *ngIf="answer.isCorrect">
+                                <span class="badge bg-primary">Es correcta</span><br>
+                            </ng-container>
                             <a [routerLink]="'/answers/answer-show/'+ answer._id">Ver más</a>
-                            <p>{{ answer.description }}</p>
                         </li>
                     </ng-container>
                 </ol>

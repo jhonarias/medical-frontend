@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { QuestionRequest, QuestionResponse } from 'src/app/shared/api-models';
 import { QuestionStatus } from 'src/app/shared/enums';
 import { Question, Subtopic, Topic } from 'src/app/shared/models';
 import { QuestionHttpService } from 'src/app/shared/services/question-http.service';
@@ -20,9 +22,10 @@ export class QuestionEditContainerComponent implements OnInit {
   protected question: Question;
 
   constructor(
-    private route: ActivatedRoute,
     protected questionHttpService: QuestionHttpService,
-    protected topicHttpService: TopicHttpService
+    protected topicHttpService: TopicHttpService,
+    private route: ActivatedRoute,
+    private location: Location
   ) {
     this.form = new FormGroup({});
     this.resourceId = '';
@@ -35,6 +38,17 @@ export class QuestionEditContainerComponent implements OnInit {
 
   ngOnInit(): void {
     this.internalInit();
+  }
+
+  public validate(): void {
+    if (
+      this.form.valid
+      // && (this.forms.get('topic')?.value || this.forms.get('subtopic')?.value)
+    ) {
+      this.register();
+    } else {
+      alert('Formulario invalido o debe seleccionar un tema o un subtema');
+    }
   }
 
   protected internalInit(): void {
@@ -99,5 +113,28 @@ export class QuestionEditContainerComponent implements OnInit {
       topic: new FormControl(this.question.topic?._id, []),
       subtopic: new FormControl(this.question.subtopic?._id, []),
     });
+  }
+
+  protected buildRequest(): QuestionRequest {
+    return {
+      _id: this.resourceId,
+      ...this.form.value
+    };
+  }
+
+  protected register() {
+    const requests = this.buildRequest();
+    this.questionHttpService.updateQuestion(requests).subscribe({
+      next: (response) => {
+        this.handleRegisterSuccess(response);
+      },
+      error: (err) => {
+        console.error('err', err);
+      },
+    });
+  }
+
+  protected handleRegisterSuccess(response: QuestionResponse) {
+    this.location.back();
   }
 }

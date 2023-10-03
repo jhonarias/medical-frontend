@@ -24,13 +24,13 @@ export class AnswerHttpService extends HttpClientService {
     return this.get(environment.apiURLAnswer, '');
   }
 
-  public getQuestionById(id: string): Observable<AnswerResponse> {
+  public getAnswerById(id: string): Observable<AnswerResponse> {
     return this.get(environment.apiURLAnswer, id);
   }
 
-  public updateAnswer(request: AnswerRequest, id: string) {
+  public updateAnswer(request: AnswerRequest) {
     return this.put<AnswerRequest, AnswerResponse>(
-      environment.apiURLAnswer + '/' + id,
+      environment.apiURLAnswer + '/' + request._id,
       '',
       request
     );

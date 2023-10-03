@@ -8,11 +8,13 @@ import {
 } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { Router } from '@angular/router';
+import { AuthenticatedService } from './authenticated.service';
 
 @Injectable({ providedIn: 'root' })
 export class JwtInterceptor implements HttpInterceptor {
   constructor(
     protected authenticationStorageService: AuthenticationStorageService,
+    protected authenticatedService: AuthenticatedService,
     private router: Router
   ) {}
 
@@ -37,10 +39,10 @@ export class JwtInterceptor implements HttpInterceptor {
       // tslint:disable-next-line: no-any
       catchError((err: any) => {
         if (err instanceof HttpErrorResponse && err.status === 403) {
-          this.authenticationStorageService.removeAuthenticationTokenData();
           // this.router.navigate(['/home']);
           return next.handle(request);
         } else if (err instanceof HttpErrorResponse && err.status === 401) {
+          this.authenticatedService.logout();
           // alert('UNAUTHORIZED');
           this.router.navigate(['/home']);
         }

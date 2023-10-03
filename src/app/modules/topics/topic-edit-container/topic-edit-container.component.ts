@@ -4,8 +4,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subtopic, Topic } from 'src/app/shared/models';
 import { TopicHttpService } from '../../../shared/services/topic-http.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { SubtopicRequest, TopicRequest } from 'src/app/shared/api-models';
-import { ResourceType } from 'src/app/shared/enums';
+import {
+  SubtopicRequest,
+  SubtopicResponse,
+  TopicRequest,
+  TopicResponse,
+} from 'src/app/shared/api-models';
+import { MediaType, ResourceType } from 'src/app/shared/enums';
+import { MediaService } from 'src/app/shared/services/media.service';
 
 @Component({
   selector: 'topic-edit-container',
@@ -18,14 +24,18 @@ export class TopicEditContainerComponent implements OnInit {
   public form: FormGroup;
   public topics: Topic[];
   public statusList: string[];
+  public mediaType: MediaType;
+  public mediaTypeEnum = MediaType;
+  public file: string;
+  public fileMediaType: MediaType;
 
   protected resourceType: ResourceType;
   public resourceTypeEnum = ResourceType;
   protected resourceId: string;
-  protected file: string;
 
   constructor(
     protected topicHttpService: TopicHttpService,
+    protected mediaService: MediaService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -39,6 +49,8 @@ export class TopicEditContainerComponent implements OnInit {
     this.topics = [];
     this.statusList = [];
     this.file = '';
+    this.mediaType = MediaType.UNKNOWN;
+    this.fileMediaType = MediaType.UNKNOWN;
   }
 
   ngOnInit(): void {
@@ -65,6 +77,7 @@ export class TopicEditContainerComponent implements OnInit {
     reader.onload = () => {
       const base64Image = reader.result as string;
       this.file = base64Image;
+      this.fileMediaType = this.mediaService.getMediaTypeFromBase64(this.file);
     };
     reader.readAsDataURL(file);
   }
@@ -101,6 +114,9 @@ export class TopicEditContainerComponent implements OnInit {
       .getResourceById(this.resourceId, this.resourceType)
       .subscribe({
         next: (response) => {
+          this.mediaType = this.mediaService.getMediaTypeFromBase64(
+            response.data.files
+          );
           if (this.resourceType === ResourceType.TOPIC) {
             this.topic = response.data as Topic;
           } else {

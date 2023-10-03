@@ -31,8 +31,7 @@ export class AppComponent implements OnInit {
   }
 
   public logout() {
-    this.authenticationStorageService.removeAuthenticationTokenData();
-    this.authenticatedService.isAuthenticated.next(false);
+    this.authenticatedService.logout();
     this.router.navigate(['/login']);
   }
 

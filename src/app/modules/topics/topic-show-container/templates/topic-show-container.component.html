@@ -3,7 +3,15 @@
         <div class="col-12 col-sm-8">
             <div class="card">
                 <ng-container *ngIf="topic.files">
-                    <img [src]="topic.files" alt="" class="card-img-top">
+                    <ng-container *ngIf="mediaType === mediaTypeEnum.IMAGE">
+                        <img [src]="topic.files" alt="" class="card-img-top">
+                    </ng-container>
+                    <ng-container *ngIf="mediaType === mediaTypeEnum.VIDEO">
+                        <video width="100%" controls>
+                            <source [src]="topic.files" type="video/mp4">
+                            Tu navegador no admite la reproducción de video.
+                        </video>
+                    </ng-container>
                 </ng-container>
                 <div class="card-body">
                     <h5 class="card-title">{{ topic.name }}</h5>
@@ -52,7 +60,17 @@
         <div class="col-12 col-sm-8">
             <div class="card">
                 <ng-container *ngIf="subtopic.files">
-                    <img [src]="subtopic.files" alt="" class="card-img-top">
+                    <ng-container *ngIf="subtopic.files">
+                        <ng-container *ngIf="mediaType === mediaTypeEnum.IMAGE">
+                            <img [src]="subtopic.files" alt="" class="card-img-top">
+                        </ng-container>
+                        <ng-container *ngIf="mediaType === mediaTypeEnum.VIDEO">
+                            <video width="100%" controls>
+                                <source [src]="subtopic.files" type="video/mp4">
+                                Tu navegador no admite la reproducción de video.
+                            </video>
+                        </ng-container>
+                    </ng-container>
                 </ng-container>
                 <div class="card-body">
                     <h5 class="card-title">{{ subtopic.name }}</h5>
@@ -142,7 +160,7 @@
             <ul>
                 <ng-container *ngFor="let summarySolvedQuestion of summarySolvedQuestions">
                     <li>
-                        {{summarySolvedQuestion.question.description}} is {{summarySolvedQuestion.isCorrect ? 'correcta': 'incorrecta'}}
+                        {{summarySolvedQuestion.question.description}} es {{summarySolvedQuestion.isCorrect ? 'correcta': 'incorrecta'}}
                         <!-- <ng-container *ngIf="!summarySolvedQuestion.isCorrect">
                             <br>
                             La respuesta correcta is {{summarySolvedQuestion.correctAnswer.description}}

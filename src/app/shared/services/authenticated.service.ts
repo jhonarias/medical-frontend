@@ -23,4 +23,9 @@ export class AuthenticatedService {
     // @ts-ignore
     return roles?.some((rol) => userRoles.includes(rol));
   }
+
+  public logout(): void {
+    this.authenticationStorageService.removeAuthenticationTokenData();
+    this.isAuthenticated.next(false);
+  }
 }

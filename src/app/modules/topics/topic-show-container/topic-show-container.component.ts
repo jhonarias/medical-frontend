@@ -8,13 +8,14 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SubtopicResponse, TopicResponse } from 'src/app/shared/api-models';
-import { ResourceType, UserType } from 'src/app/shared/enums';
+import { MediaType, ResourceType, UserType } from 'src/app/shared/enums';
 import { formGroupHelper } from 'src/app/shared/helpers';
 import { Answer, Question, Subtopic, Topic } from 'src/app/shared/models';
 import { QuestionHttpService } from 'src/app/shared/services/question-http.service';
 import { AuthenticatedService } from '../../../shared/services/authenticated.service';
 import { TopicHttpService } from '../../../shared/services/topic-http.service';
 import { FormQuestion, SummarySolvedQuestion } from '../models';
+import { MediaService } from 'src/app/shared/services/media.service';
 
 @Component({
   selector: 'topic-show-container',
@@ -28,6 +29,8 @@ export class TopicShowContainerComponent implements OnInit {
   public isAdmin: boolean;
   public questionsForm: FormArray;
   public summarySolvedQuestions: SummarySolvedQuestion[];
+  public mediaType: MediaType;
+  public mediaTypeEnum = MediaType;
 
   protected resourceType: ResourceType;
   protected resourceId: string;
@@ -36,6 +39,7 @@ export class TopicShowContainerComponent implements OnInit {
     public authenticatedService: AuthenticatedService,
     protected topicHttpService: TopicHttpService,
     protected questionHttpService: QuestionHttpService,
+    protected mediaService: MediaService,
     private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder
@@ -51,6 +55,7 @@ export class TopicShowContainerComponent implements OnInit {
     // @ts-ignore
     this.questionsForm = new FormArray([]);
     this.summarySolvedQuestions = [];
+    this.mediaType = this.mediaTypeEnum.UNKNOWN;
   }
 
   ngOnInit(): void {
@@ -141,7 +146,7 @@ export class TopicShowContainerComponent implements OnInit {
     this.questionHttpService.getQuestionsByTopic(this.topic._id).subscribe({
       next: (response) => {
         if (!response.data.length) {
-          alert('No hay preguntas');
+          // alert('No hay preguntas');
         }
         this.questions = response.data;
         this.buildQuestionsForm();
@@ -191,7 +196,7 @@ export class TopicShowContainerComponent implements OnInit {
       .subscribe({
         next: (response) => {
           if (!response.data.length) {
-            alert('No hay preguntas');
+            // alert('No hay preguntas');
           }
           this.questions = response.data;
         },
@@ -244,9 +249,24 @@ export class TopicShowContainerComponent implements OnInit {
       });
   }
 
+  protected getVisualizationType(
+    response: TopicResponse | SubtopicResponse
+  ): string {
+    if (response.data.files.startsWith('data:image')) {
+      return 'image';
+    } else if (response.data.files.startsWith('data:video')) {
+      return 'video';
+    } else {
+      return 'otro';
+    }
+  }
+
   protected handleGetResourceById(
     response: TopicResponse | SubtopicResponse
   ): void {
+    this.mediaType = this.mediaService.getMediaTypeFromBase64(
+      response.data.files
+    );
     if (this.resourceType === ResourceType.TOPIC) {
       this.topic = response.data as Topic;
     } else {

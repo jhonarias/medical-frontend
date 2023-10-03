@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QuestionRequest, QuestionResponse } from 'src/app/shared/api-models';
@@ -25,8 +26,8 @@ export class QuestionCreateContainerComponent implements OnInit {
   constructor(
     protected topicHttpService: TopicHttpService,
     protected questionHttpService: QuestionHttpService,
-    private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private location: Location
   ) {
     // @ts-ignore
     this.forms = new FormArray([]);
@@ -148,7 +149,8 @@ export class QuestionCreateContainerComponent implements OnInit {
   }
 
   protected handleRegisterSuccess(response: QuestionResponse) {
-    this.forms.reset();
-    this.router.navigate(['/questions']);
+    // this.forms.reset();
+    // this.router.navigate(['/questions']);
+    this.location.back();
   }
 }

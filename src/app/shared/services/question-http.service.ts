@@ -28,9 +28,9 @@ export class QuestionHttpService extends HttpClientService {
     return this.get(environment.apiURLQuestion, id);
   }
 
-  public updateQuestion(request: QuestionRequest, id: string) {
+  public updateQuestion(request: QuestionRequest) {
     return this.put<QuestionRequest, QuestionResponse>(
-      environment.apiURLQuestion + '/' + id,
+      environment.apiURLQuestion + '/' + request._id,
       '',
       request
     );

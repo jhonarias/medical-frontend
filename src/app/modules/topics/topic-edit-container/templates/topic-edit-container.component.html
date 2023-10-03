@@ -46,13 +46,31 @@
     </ng-container>
     <div class="col-12 col-sm-6 mb-3">
         <ng-container *ngIf="topic && topic.files">
-            <small>Imagen del tema</small><br>
-            <img [src]="topic.files" alt="" class="mb-3" style="width: 200px;">
+            <ng-container *ngIf="mediaType === mediaTypeEnum.IMAGE">
+                <small>Imagen del tema</small><br>
+                <img [src]="topic.files" alt="" class="mb-3" style="width: 200px;">
+            </ng-container>
+            <ng-container *ngIf="mediaType === mediaTypeEnum.VIDEO">
+                <small>Video del tema</small><br>
+                <video width="200px" controls class="mb-3">
+                    <source [src]="topic.files" type="video/mp4">
+                    Tu navegador no admite la reproducción de video.
+                </video>
+            </ng-container>
             <br>
         </ng-container>
         <ng-container *ngIf="file">
-            <small>Nueva imagen del tema</small><br>
-            <img [src]="file" alt="" class="mb-3" style="width: 200px;">
+            <ng-container *ngIf="fileMediaType === mediaTypeEnum.IMAGE">
+                <small>Nueva imagen del tema</small><br>
+                <img [src]="file" alt="" class="mb-3" style="width: 200px;">
+            </ng-container>
+            <ng-container *ngIf="fileMediaType === mediaTypeEnum.VIDEO">
+                <small>Nuevo video del tema</small><br>
+                <video width="200px" controls class="mb-3">
+                    <source [src]="file" type="video/mp4">
+                    Tu navegador no admite la reproducción de video.
+                </video>
+            </ng-container>
             <br>
         </ng-container>
         <label for="file" class="form-label">Archivo (imagen o video)</label>

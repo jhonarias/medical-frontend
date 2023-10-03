@@ -10,7 +10,8 @@ import {
   TopicRequest,
   TopicResponse,
 } from 'src/app/shared/api-models';
-import { ResourceType } from 'src/app/shared/enums';
+import { MediaType, ResourceType } from 'src/app/shared/enums';
+import { MediaService } from 'src/app/shared/services/media.service';
 
 @Component({
   selector: 'topic-create-container',
@@ -23,11 +24,13 @@ export class TopicCreateContainerComponent implements OnInit {
   public resourceTypeEnum = ResourceType;
   public statusList: string[];
   public topics: Topic[];
-
-  protected file: string;
+  public file: string;
+  public mediaTypeEnum = MediaType;
+  public fileMediaType: MediaType;
 
   constructor(
     protected topicHttpService: TopicHttpService,
+    protected mediaService: MediaService,
     private router: Router
   ) {
     this.form = new FormGroup({});
@@ -35,6 +38,7 @@ export class TopicCreateContainerComponent implements OnInit {
     this.resourceType = ResourceType.TOPIC;
     this.topics = [];
     this.file = '';
+    this.fileMediaType = MediaType.UNKNOWN;
   }
 
   ngOnInit(): void {
@@ -61,6 +65,7 @@ export class TopicCreateContainerComponent implements OnInit {
     reader.onload = () => {
       const base64Image = reader.result as string;
       this.file = base64Image;
+      this.fileMediaType = this.mediaService.getMediaTypeFromBase64(this.file);
     };
     reader.readAsDataURL(file);
   }

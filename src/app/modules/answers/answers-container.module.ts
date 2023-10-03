@@ -6,6 +6,9 @@ import { AnswersCreateContainerComponent } from './answers-create-container/answ
 import { AnswersContainerComponent } from './answers-container/answers-container.component';
 import { AnswerCreateFormComponent } from './answers-create-container/components/answer-create-form/answer-create-form.component';
 import { AnswerHttpService } from 'src/app/shared/services/answer-http.service';
+import { AnswerShowContainerComponent } from './answer-show-container/answer-show-container.component';
+import { AnswerEditContainerComponent } from './answer-edit-container/answer-edit-container.component';
+import { QuestionHttpService } from 'src/app/shared/services/question-http.service';
 
 @NgModule({
   imports: [CommonModule, ReactiveFormsModule, AnswersContainerRoutingModule],
@@ -13,6 +16,8 @@ import { AnswerHttpService } from 'src/app/shared/services/answer-http.service';
     AnswersContainerComponent,
     AnswersCreateContainerComponent,
     AnswerCreateFormComponent,
+    AnswerShowContainerComponent,
+    AnswerEditContainerComponent,
   ],
   providers: [
     {
@@ -21,15 +26,20 @@ import { AnswerHttpService } from 'src/app/shared/services/answer-http.service';
         AnswersContainerComponent,
         AnswersCreateContainerComponent,
         AnswerCreateFormComponent,
+        AnswerShowContainerComponent,
+        AnswerEditContainerComponent,
       ],
       multi: true,
     },
     AnswerHttpService,
+    QuestionHttpService,
   ],
   exports: [
     AnswersContainerComponent,
     AnswersCreateContainerComponent,
     AnswerCreateFormComponent,
+    AnswerShowContainerComponent,
+    AnswerEditContainerComponent,
   ],
 })
 export class AnswersContainerModule {}
