@@ -1,9 +1,9 @@
-export const protocol = 'http:';//location.protocol;
+export const protocol = location.protocol;
 
 export const environment = {
-    apiURLAuthentication: protocol + '//54.210.133.194/auth',
-    apiURLTopic: protocol + '//54.210.133.194/topic',
-    apiURLSubtopic: protocol + '//54.210.133.194/subtopic',
-    apiURLQuestion: protocol + '//54.210.133.194/question',
-    apiURLAnswer: protocol + '//54.210.133.194/answer',
+    apiURLAuthentication: 'https://d1oyc4j1qqbn95.cloudfront.net/auth',
+    apiURLTopic: 'https://d1oyc4j1qqbn95.cloudfront.net/topic',
+    apiURLSubtopic: 'https://d1oyc4j1qqbn95.cloudfront.net/subtopic',
+    apiURLQuestion: 'https://d1oyc4j1qqbn95.cloudfront.net/question',
+    apiURLAnswer: 'https://d1oyc4j1qqbn95.cloudfront.net/answer',
 }
