@@ -1,9 +1,9 @@
 export const protocol = location.protocol;
 
 export const environment = {
-    apiURLAuthentication: protocol + '//localhost:3002/auth',
-    apiURLTopic: protocol + '//localhost:3002/topic',
-    apiURLSubtopic: protocol + '//localhost:3002/subtopic',
-    apiURLQuestion: protocol + '//localhost:3002/question',
-    apiURLAnswer: protocol + '//localhost:3002/answer',
+    apiURLAuthentication: protocol + '//54.210.133.194/auth',
+    apiURLTopic: protocol + '//54.210.133.194/topic',
+    apiURLSubtopic: protocol + '//54.210.133.194/subtopic',
+    apiURLQuestion: protocol + '//54.210.133.194/question',
+    apiURLAnswer: protocol + '//54.210.133.194/answer',
 }
