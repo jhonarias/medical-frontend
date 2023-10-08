@@ -1,4 +1,4 @@
-export const protocol = location.protocol;
+export const protocol = 'http:';//location.protocol;
 
 export const environment = {
     apiURLAuthentication: protocol + '//54.210.133.194/auth',
