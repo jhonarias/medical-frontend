@@ -12,11 +12,13 @@ import { UserType } from 'src/app/shared/enums';
 export class TopicsContainerComponent implements OnInit {
   public topicData: Topic[];
   public userType = UserType;
+  public isLoading: boolean;
 
   constructor(
     public authenticatedService: AuthenticatedService,
     protected topicHttpService: TopicHttpService) {
     this.topicData = [];
+    this.isLoading = true;
   }
 
   ngOnInit(): void {
@@ -31,8 +33,10 @@ export class TopicsContainerComponent implements OnInit {
     this.topicHttpService.retrieveTopics().subscribe({
       next: (response) => {
         this.topicData = response.data;
+        this.isLoading = false;
       },
       error: (error) => {
+        this.isLoading = false;
         console.log(error);
       },
     });

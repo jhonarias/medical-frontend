@@ -1,178 +1,188 @@
-<ng-container *ngIf="topic">
-    <div class="row mb-3">
-        <div class="col-12 col-sm-8">
-            <div class="card">
-                <ng-container *ngIf="topic.files">
-                    <ng-container *ngIf="mediaType === mediaTypeEnum.IMAGE">
-                        <img [src]="topic.files" alt="" class="card-img-top">
-                    </ng-container>
-                    <ng-container *ngIf="mediaType === mediaTypeEnum.VIDEO">
-                        <video width="100%" controls>
-                            <source [src]="topic.files" type="video/mp4">
-                            Tu navegador no admite la reproducción de video.
-                        </video>
-                    </ng-container>
-                </ng-container>
-                <div class="card-body">
-                    <h5 class="card-title">{{ topic.name }}</h5>
-                    <p class="card-text">{{ topic.description }}</p>
-                    <ng-container *ngIf="!isAdmin">
-                        <div class="mb-3">
-                            <button (click)="generateQuestions()" class="btn btn-primary">Generar preguntas</button>
-                        </div>
-                    </ng-container>
-                    <ng-container *ngIf="isAdmin">
-                        <div class="mb-3">
-                            <button (click)="createQuestions()" class="btn btn-primary">Crear preguntas</button>
-                        </div>
-                        <div class="mb-3">
-                            <button (click)="detete()" class="btn btn-danger">Eliminar</button>
-                        </div>
-                        <div class="mb-3">
-                            <button (click)="edit()" class="btn btn-warning">Actualizar</button>
-                        </div>
-                    </ng-container>
-                </div>
-                <div class="card-footer">
-                    <small class="text-body-secondary">Creado el: {{ topic.createdAt | date: 'dd/MM/yyyy' }} y </small>
-                    <small class="text-body-secondary">actualizado el: {{ topic.updatedAt | date: 'dd/MM/yyyy' }}</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-sm-4">         
-            <ng-container *ngIf="topic.subtopics.length">
-                <h2>Subtemas</h2>
-                <ul>
-                    <ng-container *ngFor="let subtopic of topic.subtopics">
-                        <li>
-                            <a [routerLink]="'/topics/subtopic-show/'+ subtopic._id">{{ subtopic.name }}</a>
-                            <p>{{ subtopic.description.length > 50 ? (subtopic.description | slice:0:50) + '...' : subtopic.description }}</p>
-                        </li>
-                    </ng-container>
-                </ul>
-            </ng-container>
+<ng-container *ngIf="isLoading; else content">
+    <div class="d-flex justify-content-center mt-5">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
         </div>
     </div>
 </ng-container>
 
-<ng-container *ngIf="subtopic">
-    <div class="row mb-3">
-        <div class="col-12 col-sm-8">
-            <div class="card">
-                <ng-container *ngIf="subtopic.files">
-                    <ng-container *ngIf="subtopic.files">
+<ng-template #content>
+    <ng-container *ngIf="topic">
+        <div class="row mb-3">
+            <div class="col-12 col-sm-8">
+                <div class="card">
+                    <ng-container *ngIf="topic.files">
                         <ng-container *ngIf="mediaType === mediaTypeEnum.IMAGE">
-                            <img [src]="subtopic.files" alt="" class="card-img-top">
+                            <img [src]="topic.files" alt="" class="card-img-top">
                         </ng-container>
                         <ng-container *ngIf="mediaType === mediaTypeEnum.VIDEO">
                             <video width="100%" controls>
-                                <source [src]="subtopic.files" type="video/mp4">
+                                <source [src]="topic.files" type="video/mp4">
                                 Tu navegador no admite la reproducción de video.
                             </video>
                         </ng-container>
                     </ng-container>
-                </ng-container>
-                <div class="card-body">
-                    <h5 class="card-title">{{ subtopic.name }}</h5>
-                    <p class="card-text">{{ subtopic.description }}</p>
-                    <ng-container *ngIf="!isAdmin">
-                        <div class="mb-3">
-                            <button (click)="generateQuestions()" class="btn btn-primary">Generar preguntas</button>
-                        </div>
-                    </ng-container>
-                    <ng-container *ngIf="isAdmin">
-                        <div class="mb-3">
-                            <button (click)="createQuestions()" class="btn btn-primary">Crear preguntas</button>
-                        </div>
-                        <div class="mb-3">
-                            <button (click)="detete()" class="btn btn-danger">Eliminar</button>
-                        </div>
-                        <div class="mb-3">
-                            <button (click)="edit()" class="btn btn-warning">Actualizar</button>
-                        </div>
-                    </ng-container>
-                </div>
-                <div class="card-footer">
-                    <small class="text-body-secondary">Creado el: {{ subtopic.createdAt | date: 'dd/MM/yyyy' }} y </small>
-                    <small class="text-body-secondary">actualizado el: {{ subtopic.updatedAt | date: 'dd/MM/yyyy' }}</small>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ topic.name }}</h5>
+                        <p class="card-text">{{ topic.description }}</p>
+                        <ng-container *ngIf="!isAdmin">
+                            <div class="mb-3">
+                                <button (click)="generateQuestions()" class="btn btn-primary">Generar preguntas</button>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="isAdmin">
+                            <div class="mb-3">
+                                <button (click)="createQuestions()" class="btn btn-primary">Crear preguntas</button>
+                            </div>
+                            <div class="mb-3">
+                                <button (click)="detete()" class="btn btn-danger">Eliminar</button>
+                            </div>
+                            <div class="mb-3">
+                                <button (click)="edit()" class="btn btn-warning">Actualizar</button>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-body-secondary">Creado el: {{ topic.createdAt | date: 'dd/MM/yyyy' }} y </small>
+                        <small class="text-body-secondary">actualizado el: {{ topic.updatedAt | date: 'dd/MM/yyyy' }}</small>
+                    </div>
                 </div>
             </div>
+            <div class="col-12 col-sm-4">         
+                <ng-container *ngIf="topic.subtopics.length">
+                    <h2>Subtemas</h2>
+                    <ul>
+                        <ng-container *ngFor="let subtopic of topic.subtopics">
+                            <li>
+                                <a [routerLink]="'/topics/subtopic-show/'+ subtopic._id">{{ subtopic.name }}</a>
+                                <p>{{ subtopic.description.length > 50 ? (subtopic.description | slice:0:50) + '...' : subtopic.description }}</p>
+                            </li>
+                        </ng-container>
+                    </ul>
+                </ng-container>
+            </div>
         </div>
-        <div class="col-12 col-sm-4">         
-            <h2>Tema</h2>
-            <ul>
-                <li>
-                    <a [routerLink]="'/topics/topic-show/'+ subtopic.topic._id">{{ subtopic.topic.name }}</a>
-                    <p>{{ subtopic.topic.description.length > 50 ? (subtopic.topic.description | slice:0:50) + '...' : subtopic.topic.description }}</p>
-                </li>
-            </ul>
-        </div>
-    </div>
-</ng-container>
-
-<ng-container *ngIf="questionsForm && questionsForm.controls.length">
-    <div class="card mb-3">
-        <div class="card-body">
-            <form [formGroup]="questionsForm" class="row">
-                <ng-container *ngFor="let questionForm of questionsForm.controls; let i = index">
-                    <div class="col-12 mb-3">
-                        <div [formGroup]="questionForm">
-                            <p>{{ questionForm.get('description').value }}</p>
-                            <ng-container *ngIf="isAdmin">
-                                <div class="mb-3">
-                                    <a [routerLink]="'/questions/question-show/'+ questionForm.get('_id').value" class="btn btn-primary">Ver pregunta</a>
-                                </div>
+    </ng-container>
+    
+    <ng-container *ngIf="subtopic">
+        <div class="row mb-3">
+            <div class="col-12 col-sm-8">
+                <div class="card">
+                    <ng-container *ngIf="subtopic.files">
+                        <ng-container *ngIf="subtopic.files">
+                            <ng-container *ngIf="mediaType === mediaTypeEnum.IMAGE">
+                                <img [src]="subtopic.files" alt="" class="card-img-top">
                             </ng-container>
-                            <ng-container *ngFor="let answerForm of questionForm.get('answers').controls; let j = index">
-                                <div class="form-check">
-                                    <div [formGroup]="answerForm">
-                                        <input class="form-check-input"
-                                            type="radio"
-                                            [id]="answerForm.get('_id').value"
-                                            [attr.name]="'answer' + i"
-                                            (input)="questionForm.get('selectedAnswer').setValue(answerForm.get('_id').value)">
-                                        <label [for]="answerForm.get('_id').value" class="form-check-label">
-                                            {{ answerForm.get('description').value }}
-                                        </label>
-                                    </div>
-                                </div>
+                            <ng-container *ngIf="mediaType === mediaTypeEnum.VIDEO">
+                                <video width="100%" controls>
+                                    <source [src]="subtopic.files" type="video/mp4">
+                                    Tu navegador no admite la reproducción de video.
+                                </video>
                             </ng-container>
-                            <p *ngIf="questionForm.get('selectedAnswer')?.invalid && (questionForm.get('selectedAnswer')?.dirty || questionForm.get('selectedAnswer')?.touched)" class="text-danger">Selecciona una respuesta</p>
-                        </div>
+                        </ng-container>
+                    </ng-container>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ subtopic.name }}</h5>
+                        <p class="card-text">{{ subtopic.description }}</p>
+                        <ng-container *ngIf="!isAdmin">
+                            <div class="mb-3">
+                                <button (click)="generateQuestions()" class="btn btn-primary">Generar preguntas</button>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="isAdmin">
+                            <div class="mb-3">
+                                <button (click)="createQuestions()" class="btn btn-primary">Crear preguntas</button>
+                            </div>
+                            <div class="mb-3">
+                                <button (click)="detete()" class="btn btn-danger">Eliminar</button>
+                            </div>
+                            <div class="mb-3">
+                                <button (click)="edit()" class="btn btn-warning">Actualizar</button>
+                            </div>
+                        </ng-container>
                     </div>
-                </ng-container>
-                <div class="col-12 text-center">
-                    <button class="btn btn-success"
-                        (click)="validate()">
-                        <span class="button_label">
-                            Enviar
-                        </span>
-                    </button>
+                    <div class="card-footer">
+                        <small class="text-body-secondary">Creado el: {{ subtopic.createdAt | date: 'dd/MM/yyyy' }} y </small>
+                        <small class="text-body-secondary">actualizado el: {{ subtopic.updatedAt | date: 'dd/MM/yyyy' }}</small>
+                    </div>
                 </div>
-            </form>
-        </div>
-    </div>
-</ng-container>
-
-<ng-container *ngIf="summarySolvedQuestions.length">
-    <div class="card mb-3">
-        <div class="card-body">
-            <ul>
-                <ng-container *ngFor="let summarySolvedQuestion of summarySolvedQuestions">
+            </div>
+            <div class="col-12 col-sm-4">         
+                <h2>Tema</h2>
+                <ul>
                     <li>
-                        {{summarySolvedQuestion.question.description}} es {{summarySolvedQuestion.isCorrect ? 'correcta': 'incorrecta'}}
-                        <!-- <ng-container *ngIf="!summarySolvedQuestion.isCorrect">
-                            <br>
-                            La respuesta correcta is {{summarySolvedQuestion.correctAnswer.description}}
-                        </ng-container> -->
+                        <a [routerLink]="'/topics/topic-show/'+ subtopic.topic._id">{{ subtopic.topic.name }}</a>
+                        <p>{{ subtopic.topic.description.length > 50 ? (subtopic.topic.description | slice:0:50) + '...' : subtopic.topic.description }}</p>
                     </li>
-                </ng-container>
-            </ul>
-            <button class="btn btn-success">
-            <span class="button_label" (click)="regenerateQuestions()">
-                Volver a generar preguntas
-            </span>
-        </button>
+                </ul>
+            </div>
         </div>
-    </div>
-</ng-container>
+    </ng-container>
+    
+    <ng-container *ngIf="questionsForm && questionsForm.controls.length">
+        <div class="card mb-3">
+            <div class="card-body">
+                <form [formGroup]="questionsForm" class="row">
+                    <ng-container *ngFor="let questionForm of questionsForm.controls; let i = index">
+                        <div class="col-12 mb-3">
+                            <div [formGroup]="questionForm">
+                                <p>{{ questionForm.get('description').value }}</p>
+                                <ng-container *ngIf="isAdmin">
+                                    <div class="mb-3">
+                                        <a [routerLink]="'/questions/question-show/'+ questionForm.get('_id').value" class="btn btn-primary">Ver pregunta</a>
+                                    </div>
+                                </ng-container>
+                                <ng-container *ngFor="let answerForm of questionForm.get('answers').controls; let j = index">
+                                    <div class="form-check">
+                                        <div [formGroup]="answerForm">
+                                            <input class="form-check-input"
+                                                type="radio"
+                                                [id]="answerForm.get('_id').value"
+                                                [attr.name]="'answer' + i"
+                                                (input)="questionForm.get('selectedAnswer').setValue(answerForm.get('_id').value)">
+                                            <label [for]="answerForm.get('_id').value" class="form-check-label">
+                                                {{ answerForm.get('description').value }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <p *ngIf="questionForm.get('selectedAnswer')?.invalid && (questionForm.get('selectedAnswer')?.dirty || questionForm.get('selectedAnswer')?.touched)" class="text-danger">Selecciona una respuesta</p>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <div class="col-12 text-center">
+                        <button class="btn btn-success"
+                            (click)="validate()">
+                            <span class="button_label">
+                                Enviar
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </ng-container>
+    
+    <ng-container *ngIf="summarySolvedQuestions.length">
+        <div class="card mb-3">
+            <div class="card-body">
+                <ul>
+                    <ng-container *ngFor="let summarySolvedQuestion of summarySolvedQuestions">
+                        <li>
+                            {{summarySolvedQuestion.question.description}} es {{summarySolvedQuestion.isCorrect ? 'correcta': 'incorrecta'}}
+                            <!-- <ng-container *ngIf="!summarySolvedQuestion.isCorrect">
+                                <br>
+                                La respuesta correcta is {{summarySolvedQuestion.correctAnswer.description}}
+                            </ng-container> -->
+                        </li>
+                    </ng-container>
+                </ul>
+                <button class="btn btn-success">
+                <span class="button_label" (click)="regenerateQuestions()">
+                    Volver a generar preguntas
+                </span>
+            </button>
+            </div>
+        </div>
+    </ng-container>
+</ng-template>

@@ -1,21 +1,32 @@
 <h1>Login</h1>
-<form [formGroup]="form" class="row">
-    <div class="col-12 col-sm-6 mb-3">
-        <label for="email" class="form-label">Correo</label>
-        <input type="email" id="email" autocomplete="email" formControlName="email" placeholder="nombre@ejemplo.com" class="form-control">
-        <p *ngIf="form.get('email')?.invalid && (form.get('email')?.dirty || form.get('email')?.touched)" class="text-danger">Ingresa el correo</p>
-    </div>
-    <div class="col-12 col-sm-6 mb-3">
-        <label for="password" class="form-label">Contraseña</label>
-        <input type="password" id="password" autocomplete="current-password" formControlName="password" placeholder="******" class="form-control">
-        <p *ngIf="form.get('password')?.invalid && (form.get('password')?.dirty || form.get('password')?.touched)" class="text-danger">Ingresa la contraseña</p>
-    </div>
-    <div class="col-12 text-center">
-        <button class="btn btn-success"
-            (click)="validate()">
-            <span class="button_label">
-                Login
-            </span>
-        </button>
-    </div>
-</form>
+
+<div class="login-form_container">
+    <ng-container *ngIf="isLoading;">
+        <div class="d-flex justify-content-center mb-5">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </ng-container>
+    <form [formGroup]="form" class="row">
+        <div class="col-12 col-sm-6 mb-3">
+            <label for="email" class="form-label">Correo</label>
+            <input type="email" id="email" autocomplete="email" formControlName="email" placeholder="nombre@ejemplo.com" class="form-control">
+            <p *ngIf="form.get('email')?.invalid && (form.get('email')?.dirty || form.get('email')?.touched)" class="text-danger">Ingresa el correo</p>
+        </div>
+        <div class="col-12 col-sm-6 mb-3">
+            <label for="password" class="form-label">Contraseña</label>
+            <input type="password" id="password" autocomplete="current-password" formControlName="password" placeholder="******" class="form-control">
+            <p *ngIf="form.get('password')?.invalid && (form.get('password')?.dirty || form.get('password')?.touched)" class="text-danger">Ingresa la contraseña</p>
+        </div>
+        <div class="col-12 text-center">
+            <button class="btn btn-success"
+                (click)="validate()"
+                [disabled]="isLoading ? 'disabled' : null">
+                <span class="button_label">
+                    Login
+                </span>
+            </button>
+        </div>
+    </form>
+</div>

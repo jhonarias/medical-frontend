@@ -6,85 +6,95 @@
     <h1>Actualizar subtema</h1>
 </ng-template>
 
-<form [formGroup]="form" class="row">
-    <div class="col-12 mb-3">
-        <label for="name" class="form-label">Nombre</label>
-        <input type="text" id="name" formControlName="name" placeholder="Nombre" class="form-control">
-        <p *ngIf="form.get('name')?.invalid && (form.get('name')?.dirty || form.get('name')?.touched)"
-            class="text-danger">Ingresa el nombre</p>
+<ng-container *ngIf="isLoading; else content">
+    <div class="d-flex justify-content-center mt-5">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
     </div>
-    <div class="col-12 mb-3">
-        <label for="description" class="form-label">Descripción</label>
-        <textarea id="description" autocomplete="description" formControlName="description" placeholder="Descripción"
-            class="form-control" rows="3">
-        </textarea>
-        <p *ngIf="form.get('description')?.invalid && (form.get('description')?.dirty || form.get('description')?.touched)"
-            class="text-danger">
-            Ingresa la descripción</p>
-    </div>
-    <div class="col-12 col-sm-6 mb-3">
-        <label for="status" class="form-label">Estado</label>
-        <select id="status" autocomplete="status" formControlName="status" placeholder="status" class="form-control">
-            <ng-container *ngFor="let status of statusList">
-                <option [value]="status">{{ status }}</option>
-            </ng-container>
-        </select>
-        <p *ngIf="form.get('status')?.invalid && (form.get('status')?.dirty || form.get('status')?.touched)"
-            class="text-danger">Selectiona el estado</p>
-    </div>
-    <ng-container *ngIf="resourceType === resourceTypeEnum.SUBTOPIC">
+</ng-container>
+
+<ng-template #content>
+    <form [formGroup]="form" class="row">
+        <div class="col-12 mb-3">
+            <label for="name" class="form-label">Nombre</label>
+            <input type="text" id="name" formControlName="name" placeholder="Nombre" class="form-control">
+            <p *ngIf="form.get('name')?.invalid && (form.get('name')?.dirty || form.get('name')?.touched)"
+                class="text-danger">Ingresa el nombre</p>
+        </div>
+        <div class="col-12 mb-3">
+            <label for="description" class="form-label">Descripción</label>
+            <textarea id="description" autocomplete="description" formControlName="description" placeholder="Descripción"
+                class="form-control" rows="3">
+            </textarea>
+            <p *ngIf="form.get('description')?.invalid && (form.get('description')?.dirty || form.get('description')?.touched)"
+                class="text-danger">
+                Ingresa la descripción</p>
+        </div>
         <div class="col-12 col-sm-6 mb-3">
-            <label for="topic" class="form-label">Tema</label>
-            <select id="topic" autocomplete="topic" formControlName="topic" placeholder="topics" class="form-control">
-                <ng-container *ngFor="let topic of topics">
-                    <option [value]="topic._id">{{ topic.name }}</option>
+            <label for="status" class="form-label">Estado</label>
+            <select id="status" autocomplete="status" formControlName="status" placeholder="status" class="form-control">
+                <ng-container *ngFor="let status of statusList">
+                    <option [value]="status">{{ status }}</option>
                 </ng-container>
             </select>
-            <p *ngIf="form.get('topic')?.invalid && (form.get('topic')?.dirty || form.get('topic')?.touched)"
-                class="text-danger">Selectiona el tema</p>
+            <p *ngIf="form.get('status')?.invalid && (form.get('status')?.dirty || form.get('status')?.touched)"
+                class="text-danger">Selectiona el estado</p>
         </div>
-    </ng-container>
-    <div class="col-12 col-sm-6 mb-3">
-        <ng-container *ngIf="topic && topic.files">
-            <ng-container *ngIf="mediaType === mediaTypeEnum.IMAGE">
-                <small>Imagen del tema</small><br>
-                <img [src]="topic.files" alt="" class="mb-3" style="width: 200px;">
-            </ng-container>
-            <ng-container *ngIf="mediaType === mediaTypeEnum.VIDEO">
-                <small>Video del tema</small><br>
-                <video width="200px" controls class="mb-3">
-                    <source [src]="topic.files" type="video/mp4">
-                    Tu navegador no admite la reproducción de video.
-                </video>
-            </ng-container>
-            <br>
+        <ng-container *ngIf="resourceType === resourceTypeEnum.SUBTOPIC">
+            <div class="col-12 col-sm-6 mb-3">
+                <label for="topic" class="form-label">Tema</label>
+                <select id="topic" autocomplete="topic" formControlName="topic" placeholder="topics" class="form-control">
+                    <ng-container *ngFor="let topic of topics">
+                        <option [value]="topic._id">{{ topic.name }}</option>
+                    </ng-container>
+                </select>
+                <p *ngIf="form.get('topic')?.invalid && (form.get('topic')?.dirty || form.get('topic')?.touched)"
+                    class="text-danger">Selectiona el tema</p>
+            </div>
         </ng-container>
-        <ng-container *ngIf="file">
-            <ng-container *ngIf="fileMediaType === mediaTypeEnum.IMAGE">
-                <small>Nueva imagen del tema</small><br>
-                <img [src]="file" alt="" class="mb-3" style="width: 200px;">
+        <div class="col-12 col-sm-6 mb-3">
+            <ng-container *ngIf="topic && topic.files">
+                <ng-container *ngIf="mediaType === mediaTypeEnum.IMAGE">
+                    <small>Imagen del tema</small><br>
+                    <img [src]="topic.files" alt="" class="mb-3" style="width: 200px;">
+                </ng-container>
+                <ng-container *ngIf="mediaType === mediaTypeEnum.VIDEO">
+                    <small>Video del tema</small><br>
+                    <video width="200px" controls class="mb-3">
+                        <source [src]="topic.files" type="video/mp4">
+                        Tu navegador no admite la reproducción de video.
+                    </video>
+                </ng-container>
+                <br>
             </ng-container>
-            <ng-container *ngIf="fileMediaType === mediaTypeEnum.VIDEO">
-                <small>Nuevo video del tema</small><br>
-                <video width="200px" controls class="mb-3">
-                    <source [src]="file" type="video/mp4">
-                    Tu navegador no admite la reproducción de video.
-                </video>
+            <ng-container *ngIf="file">
+                <ng-container *ngIf="fileMediaType === mediaTypeEnum.IMAGE">
+                    <small>Nueva imagen del tema</small><br>
+                    <img [src]="file" alt="" class="mb-3" style="width: 200px;">
+                </ng-container>
+                <ng-container *ngIf="fileMediaType === mediaTypeEnum.VIDEO">
+                    <small>Nuevo video del tema</small><br>
+                    <video width="200px" controls class="mb-3">
+                        <source [src]="file" type="video/mp4">
+                        Tu navegador no admite la reproducción de video.
+                    </video>
+                </ng-container>
+                <br>
             </ng-container>
-            <br>
-        </ng-container>
-        <label for="file" class="form-label">Archivo (imagen o video)</label>
-        <input type="file" id="file" autocomplete="file" formControlName="file" placeholder="file"
-            (change)="onFileChange($event)" class="form-control">
-        <p *ngIf="form.get('file')?.invalid && (form.get('file')?.dirty || form.get('file')?.touched)"
-            class="text-danger">
-            Selecciona el archivo</p>
-    </div>
-    <div class="col-12 text-center">
-        <button class="btn btn-success" (click)="validate()">
-            <span class="button_label">
-                Actualizar
-            </span>
-        </button>
-    </div>
-</form>
+            <label for="file" class="form-label">Archivo (imagen o video)</label>
+            <input type="file" id="file" autocomplete="file" formControlName="file" placeholder="file"
+                (change)="onFileChange($event)" class="form-control">
+            <p *ngIf="form.get('file')?.invalid && (form.get('file')?.dirty || form.get('file')?.touched)"
+                class="text-danger">
+                Selecciona el archivo</p>
+        </div>
+        <div class="col-12 text-center">
+            <button class="btn btn-success" (click)="validate()">
+                <span class="button_label">
+                    Actualizar
+                </span>
+            </button>
+        </div>
+    </form>
+</ng-template>

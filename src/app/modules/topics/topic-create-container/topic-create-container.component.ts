@@ -27,6 +27,7 @@ export class TopicCreateContainerComponent implements OnInit {
   public file: string;
   public mediaTypeEnum = MediaType;
   public fileMediaType: MediaType;
+  public isLoading: boolean;
 
   constructor(
     protected topicHttpService: TopicHttpService,
@@ -39,6 +40,7 @@ export class TopicCreateContainerComponent implements OnInit {
     this.topics = [];
     this.file = '';
     this.fileMediaType = MediaType.UNKNOWN;
+    this.isLoading = false;
   }
 
   ngOnInit(): void {
@@ -106,12 +108,15 @@ export class TopicCreateContainerComponent implements OnInit {
 
   protected retrieveTopics(): void {
     if (this.resourceType === this.resourceTypeEnum.SUBTOPIC) {
+      this.isLoading = true;
       this.topicHttpService.retrieveTopics().subscribe({
         next: (response) => {
           this.topics = response.data;
+          this.isLoading = false;
         },
         error: (err) => {
           console.error(err);
+          this.isLoading = false;
         },
       });
     }
@@ -126,6 +131,7 @@ export class TopicCreateContainerComponent implements OnInit {
   }
 
   protected register() {
+    this.isLoading = true;
     const request = this.buildRequest();
     this.topicHttpService
       .registerResource(request, this.resourceType)
@@ -135,6 +141,7 @@ export class TopicCreateContainerComponent implements OnInit {
         },
         error: (err) => {
           console.log('err', err);
+          this.isLoading = false;
         },
       });
   }

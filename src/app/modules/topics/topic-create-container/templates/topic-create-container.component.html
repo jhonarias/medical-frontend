@@ -6,6 +6,14 @@
     <h1>Crear subtema</h1>
 </ng-template>
 
+<ng-container *ngIf="isLoading;">
+    <div class="d-flex justify-content-center mb-5">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+</ng-container>
+
 <form [formGroup]="form" class="row">
     <div class="col-12 mb-3">
         <label for="name" class="form-label">Nombre</label>
@@ -67,7 +75,9 @@
             Selecciona el archivo</p>
     </div>
     <div class="col-12 text-center">
-        <button class="btn btn-success" (click)="validate()">
+        <button class="btn btn-success"
+            (click)="validate()"
+            [disabled]="isLoading ? 'disabled' : null">
             <span class="button_label">
                 Guardar
             </span>

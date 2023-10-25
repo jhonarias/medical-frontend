@@ -6,27 +6,38 @@
         <a routerLink="subtopic-create" class="btn btn-light">Crear subtema</a>
     </div>
 </ng-container>
-<div class="list-group">
-    <ng-container *ngFor="let topic of topicData">
-        <a [routerLink]="'topic-show/'+ topic._id" class="list-group-item list-group-item-action active" aria-current="true">
-            <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">Tema: {{ topic.name }}</h5>
-            </div>
-            <p class="mb-1">{{ topic.description.length > 50 ? (topic.description | slice:0:50) + '...' : topic.description }}</p>
-        </a>
-        <div class="list-group-item list-group-item-action">
-            <ng-container *ngIf="topic.subtopics.length; else noSubtopics">
-                <h6>Subtemas</h6>
-            </ng-container>
-            <ng-template #noSubtopics><h6>No hay subtemas</h6></ng-template>
+
+<ng-container *ngIf="isLoading; else content">
+    <div class="d-flex justify-content-center mt-5">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
         </div>
-        <ng-container *ngFor="let subtopic of topic.subtopics">
-            <a [routerLink]="'subtopic-show/'+ subtopic._id" class="list-group-item list-group-item-action">
+    </div>
+</ng-container>
+
+<ng-template #content>
+    <div class="list-group">
+        <ng-container *ngFor="let topic of topicData">
+            <a [routerLink]="'topic-show/'+ topic._id" class="list-group-item list-group-item-action active" aria-current="true">
                 <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">{{ subtopic.name }}</h5>
+                <h5 class="mb-1">Tema: {{ topic.name }}</h5>
                 </div>
-                <p class="mb-1">{{ subtopic.description.length > 50 ? (subtopic.description | slice:0:50) + '...' : subtopic.description }}</p>
+                <p class="mb-1">{{ topic.description.length > 50 ? (topic.description | slice:0:50) + '...' : topic.description }}</p>
             </a>
+            <div class="list-group-item list-group-item-action">
+                <ng-container *ngIf="topic.subtopics.length; else noSubtopics">
+                    <h6>Subtemas</h6>
+                </ng-container>
+                <ng-template #noSubtopics><h6>No hay subtemas</h6></ng-template>
+            </div>
+            <ng-container *ngFor="let subtopic of topic.subtopics">
+                <a [routerLink]="'subtopic-show/'+ subtopic._id" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">{{ subtopic.name }}</h5>
+                    </div>
+                    <p class="mb-1">{{ subtopic.description.length > 50 ? (subtopic.description | slice:0:50) + '...' : subtopic.description }}</p>
+                </a>
+            </ng-container>
         </ng-container>
-    </ng-container>
-</div>
+    </div>
+</ng-template>

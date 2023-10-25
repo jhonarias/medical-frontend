@@ -31,6 +31,7 @@ export class TopicShowContainerComponent implements OnInit {
   public summarySolvedQuestions: SummarySolvedQuestion[];
   public mediaType: MediaType;
   public mediaTypeEnum = MediaType;
+  public isLoading: boolean;
 
   protected resourceType: ResourceType;
   protected resourceId: string;
@@ -56,6 +57,7 @@ export class TopicShowContainerComponent implements OnInit {
     this.questionsForm = new FormArray([]);
     this.summarySolvedQuestions = [];
     this.mediaType = this.mediaTypeEnum.UNKNOWN;
+    this.isLoading = true;
   }
 
   ngOnInit(): void {
@@ -63,6 +65,7 @@ export class TopicShowContainerComponent implements OnInit {
   }
 
   public generateQuestions(): void {
+    this.isLoading = true;
     if (this.topic) {
       this.getQuestionsByTopic();
     }
@@ -145,14 +148,13 @@ export class TopicShowContainerComponent implements OnInit {
   protected getQuestionsByTopic(): void {
     this.questionHttpService.getQuestionsByTopic(this.topic._id).subscribe({
       next: (response) => {
-        if (!response.data.length) {
-          // alert('No hay preguntas');
-        }
         this.questions = response.data;
         this.buildQuestionsForm();
+        this.isLoading = false;
       },
       error: (error) => {
         console.error(error);
+        this.isLoading = false;
       },
     });
   }
@@ -195,13 +197,12 @@ export class TopicShowContainerComponent implements OnInit {
       .getQuestionsBySubtopic(this.subtopic._id)
       .subscribe({
         next: (response) => {
-          if (!response.data.length) {
-            // alert('No hay preguntas');
-          }
           this.questions = response.data;
+          this.isLoading = false;
         },
         error: (error) => {
           console.log(error);
+          this.isLoading = false;
         },
       });
   }
@@ -242,9 +243,11 @@ export class TopicShowContainerComponent implements OnInit {
         next: (response) => {
           this.handleGetResourceById(response);
           this.handleGenerateQuestions();
+          this.isLoading = false;
         },
         error: (error) => {
           console.log(error);
+          this.isLoading = false;
         },
       });
   }

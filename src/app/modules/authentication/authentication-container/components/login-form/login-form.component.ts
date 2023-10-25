@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 })
 export class LoginFormComponent implements OnInit {
   public form: FormGroup;
+  public isLoading: boolean;
 
   constructor(
     protected authenticationService: AuthenticationService,
@@ -22,6 +23,7 @@ export class LoginFormComponent implements OnInit {
     private router: Router
   ) {
     this.form = new FormGroup({});
+    this.isLoading = false;
     this.setupEvents();
   }
 
@@ -68,10 +70,12 @@ export class LoginFormComponent implements OnInit {
       ...response,
     } as AuthenticationTokenData);
     this.authenticatedService.isAuthenticated.next(true);
+    this.isLoading = false;
   }
 
   protected login() {
     const request = this.buildRequest();
+    this.isLoading = true;
     this.authenticationService.login(request).subscribe({
       next: (response) => {
         this.handleLoginSuccess(response);
@@ -79,6 +83,7 @@ export class LoginFormComponent implements OnInit {
       error: (err) => {
         alert('Datos incorrectos');
         console.log('err', err);
+        this.isLoading = false;
       },
     });
   }

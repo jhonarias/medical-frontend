@@ -28,9 +28,10 @@ export class TopicEditContainerComponent implements OnInit {
   public mediaTypeEnum = MediaType;
   public file: string;
   public fileMediaType: MediaType;
+  public resourceTypeEnum = ResourceType;
+  public isLoading: boolean;
 
   protected resourceType: ResourceType;
-  public resourceTypeEnum = ResourceType;
   protected resourceId: string;
 
   constructor(
@@ -51,6 +52,7 @@ export class TopicEditContainerComponent implements OnInit {
     this.file = '';
     this.mediaType = MediaType.UNKNOWN;
     this.fileMediaType = MediaType.UNKNOWN;
+    this.isLoading = true;
   }
 
   ngOnInit(): void {
@@ -124,21 +126,26 @@ export class TopicEditContainerComponent implements OnInit {
           }
           this.retrieveTopics();
           this.setFormValues();
+          this.isLoading = true;
         },
         error: (error) => {
           console.log(error);
+          this.isLoading = false;
         },
       });
   }
 
   protected retrieveTopics(): void {
     if (this.resourceType === this.resourceTypeEnum.SUBTOPIC) {
+      this.isLoading = true;
       this.topicHttpService.retrieveTopics().subscribe({
         next: (response) => {
           this.topics = response.data;
+          this.isLoading = false;
         },
         error: (err) => {
           console.error(err);
+          this.isLoading = false;
         },
       });
     }
@@ -176,6 +183,7 @@ export class TopicEditContainerComponent implements OnInit {
   }
 
   protected update() {
+    this.isLoading = true;
     const request = this.buildRequest();
     this.topicHttpService
       .updateResource(request, this.resourceType, this.resourceId)
@@ -188,6 +196,7 @@ export class TopicEditContainerComponent implements OnInit {
         },
         error: (err) => {
           console.log('err', err);
+          this.isLoading = false;
         },
       });
   }
