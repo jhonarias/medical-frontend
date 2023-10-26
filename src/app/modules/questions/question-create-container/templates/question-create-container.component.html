@@ -1,4 +1,11 @@
 <h1>Crear Preguntas</h1>
+<ng-container *ngIf="isLoading;">
+    <div class="d-flex justify-content-center mb-5">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+</ng-container>
 <ng-container *ngFor="let form of forms.controls; let index = index">
     <form [formGroup]="form" class="row">
         <div class="col-12 mb-3">
@@ -53,7 +60,9 @@
     <div class="mb-3">
         <button (click)="addForm()" class="btn btn-warning">Agregar pregunta</button>
     </div>
-    <button class="btn btn-success" (click)="validate()">
+    <button class="btn btn-success"
+        (click)="validate()"
+        [disabled]="isLoading ? 'disabled' : null">
         <span class="button_label">
             Registrar
         </span>

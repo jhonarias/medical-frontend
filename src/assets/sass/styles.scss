@@ -48,3 +48,10 @@
 // Utilities
 @import "node_modules/bootstrap/scss/utilities/api";
 // scss-docs-end import-stack
+
+.no-styles {
+    margin-bottom: 16px;
+    p:not(p:last-child) {
+        margin: 0;
+    }
+}

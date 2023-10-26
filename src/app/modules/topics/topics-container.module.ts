@@ -8,9 +8,10 @@ import { TopicHttpService } from '../../shared/services/topic-http.service';
 import { TopicShowContainerComponent } from './topic-show-container/topic-show-container.component';
 import { QuestionHttpService } from 'src/app/shared/services/question-http.service';
 import { TopicEditContainerComponent } from './topic-edit-container/topic-edit-container.component';
+import { AngularEditorModule } from '@kolkov/angular-editor';
 
 @NgModule({
-  imports: [CommonModule, ReactiveFormsModule, TopicsContainerRoutingModule],
+  imports: [CommonModule, ReactiveFormsModule, TopicsContainerRoutingModule, AngularEditorModule],
   declarations: [
     TopicsContainerComponent,
     TopicCreateContainerComponent,

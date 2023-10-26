@@ -18,6 +18,7 @@ export class AnswerEditContainerComponent implements OnInit {
   public statusList: string[];
   public answer: Answer;
   public questions: Question[];
+  public isLoading: boolean;
   protected answerId: string;
 
   constructor(
@@ -32,6 +33,7 @@ export class AnswerEditContainerComponent implements OnInit {
     // @ts-ignore
     this.answer = undefined;
     this.questions = [];
+    this.isLoading = true;
   }
 
   ngOnInit(): void {
@@ -66,10 +68,12 @@ export class AnswerEditContainerComponent implements OnInit {
         this.answer = response.data;
         this.buildForm();
         this.setStatusList();
+        this.isLoading = false;
         this.retrieveQuestions();
       },
       error: (error) => {
         console.log(error);
+        this.isLoading = false;
       },
     });
   }
@@ -94,12 +98,15 @@ export class AnswerEditContainerComponent implements OnInit {
   }
 
   protected retrieveQuestions(): void {
+    this.isLoading = true;
     this.questionHttpService.retrieveQuestions().subscribe({
       next: (response) => {
         this.questions = response.data;
+        this.isLoading = false;
       },
       error: (err) => {
         console.error(err);
+        this.isLoading = false;
       },
     });
   }
@@ -112,6 +119,7 @@ export class AnswerEditContainerComponent implements OnInit {
   }
 
   protected register() {
+    this.isLoading = true;
     const requests = this.buildRequest();
     this.answerHttpService.updateAnswer(requests).subscribe({
       next: (response) => {
@@ -119,6 +127,7 @@ export class AnswerEditContainerComponent implements OnInit {
       },
       error: (err) => {
         console.error('err', err);
+        this.isLoading = false;
       },
     });
   }

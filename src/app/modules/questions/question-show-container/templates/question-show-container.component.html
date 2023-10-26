@@ -1,41 +1,51 @@
-<ng-container *ngIf="question">
-    <div class="row">
-        <div class="col-12 col-sm-8">
-            <div class="card">
-                <div class="card-body">
-                    <p class="card-text" [innerHtml]="question.description"></p>
-                    <div class="mb-3">
-                        <button (click)="detete()" class="btn btn-danger">Eliminar</button>
-                    </div>
-                    <div class="mb-3">
-                        <button (click)="edit()" class="btn btn-warning">Actualizar</button>
-                    </div>
-                    <div class="mb-3">
-                        <a [routerLink]="'/answers/answers-create'" [queryParams]="{questionId: question._id}" class="btn btn-primary">Crear respuestas</a>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <small class="text-body-secondary">Creado el: {{ question.createdAt | date: 'dd/MM/yyyy' }} y </small>
-                    <small class="text-body-secondary">actualizado el: {{ question.updatedAt | date: 'dd/MM/yyyy' }}</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-sm-4">         
-            <ng-container *ngIf="question.answers.length">
-                <h2>Respuestas</h2>
-                <ol>
-                    <ng-container *ngFor="let answer of question.answers">
-                        <li>
-                            <p>{{ answer.description.length > 30 ? (answer.description | slice:0:30) + '...' :
-                                answer.description }}</p>
-                            <ng-container *ngIf="answer.isCorrect">
-                                <span class="badge bg-primary">Es correcta</span><br>
-                            </ng-container>
-                            <a [routerLink]="'/answers/answer-show/'+ answer._id">Ver más</a>
-                        </li>
-                    </ng-container>
-                </ol>
-            </ng-container>
+<ng-container *ngIf="isLoading; else content">
+    <div class="d-flex justify-content-center mt-5">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
         </div>
     </div>
 </ng-container>
+
+<ng-template #content>
+    <ng-container *ngIf="question">
+        <div class="row">
+            <div class="col-12 col-sm-8">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-text" [innerHtml]="question.description"></p>
+                        <div class="mb-3">
+                            <button (click)="detete()" class="btn btn-danger">Eliminar</button>
+                        </div>
+                        <div class="mb-3">
+                            <button (click)="edit()" class="btn btn-warning">Actualizar</button>
+                        </div>
+                        <div class="mb-3">
+                            <a [routerLink]="'/answers/answers-create'" [queryParams]="{questionId: question._id}" class="btn btn-primary">Crear respuestas</a>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-body-secondary">Creado el: {{ question.createdAt | date: 'dd/MM/yyyy' }} y </small>
+                        <small class="text-body-secondary">actualizado el: {{ question.updatedAt | date: 'dd/MM/yyyy' }}</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-4">         
+                <ng-container *ngIf="question.answers.length">
+                    <h2>Respuestas</h2>
+                    <ol>
+                        <ng-container *ngFor="let answer of question.answers">
+                            <li>
+                                <p>{{ answer.description.length > 30 ? (answer.description | slice:0:30) + '...' :
+                                    answer.description }}</p>
+                                <ng-container *ngIf="answer.isCorrect">
+                                    <span class="badge bg-primary">Es correcta</span><br>
+                                </ng-container>
+                                <a [routerLink]="'/answers/answer-show/'+ answer._id">Ver más</a>
+                            </li>
+                        </ng-container>
+                    </ol>
+                </ng-container>
+            </div>
+        </div>
+    </ng-container>
+</ng-template>

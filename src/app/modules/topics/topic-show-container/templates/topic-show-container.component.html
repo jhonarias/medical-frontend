@@ -24,7 +24,7 @@
                     </ng-container>
                     <div class="card-body">
                         <h5 class="card-title">{{ topic.name }}</h5>
-                        <p class="card-text">{{ topic.description }}</p>
+                        <div class="card-text no-styles" [innerHTML]="topic.description"></div>
                         <ng-container *ngIf="!isAdmin">
                             <div class="mb-3">
                                 <button (click)="generateQuestions()" class="btn btn-primary">Generar preguntas</button>
@@ -55,7 +55,7 @@
                         <ng-container *ngFor="let subtopic of topic.subtopics">
                             <li>
                                 <a [routerLink]="'/topics/subtopic-show/'+ subtopic._id">{{ subtopic.name }}</a>
-                                <p>{{ subtopic.description.length > 50 ? (subtopic.description | slice:0:50) + '...' : subtopic.description }}</p>
+                                <!-- <p>{{ subtopic.description.length > 50 ? (subtopic.description | slice:0:50) + '...' : subtopic.description }}</p> -->
                             </li>
                         </ng-container>
                     </ul>
@@ -83,7 +83,7 @@
                     </ng-container>
                     <div class="card-body">
                         <h5 class="card-title">{{ subtopic.name }}</h5>
-                        <p class="card-text">{{ subtopic.description }}</p>
+                        <div class="card-text" [innerHTML]="subtopic.description"></div>
                         <ng-container *ngIf="!isAdmin">
                             <div class="mb-3">
                                 <button (click)="generateQuestions()" class="btn btn-primary">Generar preguntas</button>
@@ -112,7 +112,7 @@
                 <ul>
                     <li>
                         <a [routerLink]="'/topics/topic-show/'+ subtopic.topic._id">{{ subtopic.topic.name }}</a>
-                        <p>{{ subtopic.topic.description.length > 50 ? (subtopic.topic.description | slice:0:50) + '...' : subtopic.topic.description }}</p>
+                        <!-- <p>{{ subtopic.topic.description.length > 50 ? (subtopic.topic.description | slice:0:50) + '...' : subtopic.topic.description }}</p> -->
                     </li>
                 </ul>
             </div>

@@ -1,45 +1,58 @@
 <h1>Editar respuesta</h1>
-<form [formGroup]="form" class="row" *ngIf="form?.get('description')">
-    <div class="col-12 mb-3">
-        <label for="description" class="form-label">Descripción</label>
-        <textarea id="description" autocomplete="description" formControlName="description" placeholder="Descripción"
-            class="form-control" rows="3">
-        </textarea>
-        <p *ngIf="form.get('description')?.invalid && (form.get('description')?.dirty || form.get('description')?.touched)"
-            class="text-danger">
-            Ingresa la descripción</p>
-    </div>
-    <div class="col-12 mb-3">
-        <label for="status" class="form-label">Estado</label>
-        <select id="status" autocomplete="status" formControlName="status" placeholder="Estado" class="form-control">
-            <option value="">Selectione el status porfavor</option>
-            <ng-container *ngFor="let status of statusList">
-                <option [value]="status">{{ status }}</option>
-            </ng-container>
-        </select>
-        <p *ngIf="form.get('status')?.invalid && (form.get('status')?.dirty || form.get('status')?.touched)"
-            class="text-danger">Selecciona el estado</p>
-    </div>
-    <div class="col-12 mb-3">
-        <div class="form-check">
-            <input type="checkbox" formControlName="isCorrect" [id]="'isCorrect'" class="form-check-input" />
-            <label [for]="'isCorrect'" class="form-check-label">Marcar como correcta</label>
+
+<ng-container *ngIf="isLoading; else content">
+    <div class="d-flex justify-content-center mt-5">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
         </div>
     </div>
-    <div class="col-12 col-sm-6 mb-3">
-        <label for="question" class="form-label">Pregunta</label>
-        <select id="question" autocomplete="question" formControlName="question" placeholder="Pregunta" class="form-control">
-            <option value="">Seleccionar pregunta</option>
-            <ng-container *ngFor="let question of questions">
-                <option [value]="question._id">{{ question.description }}</option>
-            </ng-container>
-        </select>
-    </div>
-    <div class="col-12 text-center">
-        <button class="btn btn-success" (click)="validate()">
-            <span class="button_label">
-                Actualizar
-            </span>
-        </button>
-    </div>
-</form>
+</ng-container>
+
+<ng-template #content>
+    <form [formGroup]="form" class="row" *ngIf="form?.get('description')">
+        <div class="col-12 mb-3">
+            <label for="description" class="form-label">Descripción</label>
+            <textarea id="description" autocomplete="description" formControlName="description" placeholder="Descripción"
+                class="form-control" rows="3">
+            </textarea>
+            <p *ngIf="form.get('description')?.invalid && (form.get('description')?.dirty || form.get('description')?.touched)"
+                class="text-danger">
+                Ingresa la descripción</p>
+        </div>
+        <div class="col-12 mb-3">
+            <label for="status" class="form-label">Estado</label>
+            <select id="status" autocomplete="status" formControlName="status" placeholder="Estado" class="form-control">
+                <option value="">Selectione el status porfavor</option>
+                <ng-container *ngFor="let status of statusList">
+                    <option [value]="status">{{ status }}</option>
+                </ng-container>
+            </select>
+            <p *ngIf="form.get('status')?.invalid && (form.get('status')?.dirty || form.get('status')?.touched)"
+                class="text-danger">Selecciona el estado</p>
+        </div>
+        <div class="col-12 mb-3">
+            <div class="form-check">
+                <input type="checkbox" formControlName="isCorrect" [id]="'isCorrect'" class="form-check-input" />
+                <label [for]="'isCorrect'" class="form-check-label">Marcar como correcta</label>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 mb-3">
+            <label for="question" class="form-label">Pregunta</label>
+            <select id="question" autocomplete="question" formControlName="question" placeholder="Pregunta" class="form-control">
+                <option value="">Seleccionar pregunta</option>
+                <ng-container *ngFor="let question of questions">
+                    <option [value]="question._id">{{ question.description }}</option>
+                </ng-container>
+            </select>
+        </div>
+        <div class="col-12 text-center">
+            <button class="btn btn-success"
+                (click)="validate()"
+                [disabled]="isLoading ? 'disabled' : null">
+                <span class="button_label">
+                    Actualizar
+                </span>
+            </button>
+        </div>
+    </form>
+</ng-template>

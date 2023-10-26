@@ -24,9 +24,10 @@
         </div>
         <div class="col-12 mb-3">
             <label for="description" class="form-label">Descripción</label>
-            <textarea id="description" autocomplete="description" formControlName="description" placeholder="Descripción"
+            <angular-editor formControlName="description" [config]="config"></angular-editor>
+            <!-- <textarea id="description" autocomplete="description" formControlName="description" placeholder="Descripción"
                 class="form-control" rows="3">
-            </textarea>
+            </textarea> -->
             <p *ngIf="form.get('description')?.invalid && (form.get('description')?.dirty || form.get('description')?.touched)"
                 class="text-danger">
                 Ingresa la descripción</p>
@@ -90,7 +91,9 @@
                 Selecciona el archivo</p>
         </div>
         <div class="col-12 text-center">
-            <button class="btn btn-success" (click)="validate()">
+            <button class="btn btn-success"
+                (click)="validate()"
+                [disabled]="isLoading ? 'disabled' : null">
                 <span class="button_label">
                     Actualizar
                 </span>

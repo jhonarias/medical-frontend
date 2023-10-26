@@ -14,6 +14,7 @@ export class AnswersCreateContainerComponent implements OnInit {
   public forms: FormArray;
   public statusList: string[];
   public questionId: string;
+  public isLoading: boolean;
 
   constructor(
     protected answerHttpService: AnswerHttpService,
@@ -24,6 +25,7 @@ export class AnswersCreateContainerComponent implements OnInit {
     // @ts-ignore
     this.forms = new FormArray([]);
     this.statusList = [];
+    this.isLoading = false;
   }
 
   ngOnInit(): void {
@@ -81,13 +83,14 @@ export class AnswersCreateContainerComponent implements OnInit {
   }
 
   protected register() {
+    this.isLoading = true;
     const request = this.buildRequest();
     console.log(request);
     this.answerHttpService.createAnswers(request).subscribe({
       next: (response) => {
         this.handleRegisterSuccess(response);
       },
-      error: (err) => console.error(err),
+      error: (err) => {console.error(err); this.isLoading = false;}
     });
   }
 

@@ -12,6 +12,7 @@ import {
 } from 'src/app/shared/api-models';
 import { MediaType, ResourceType } from 'src/app/shared/enums';
 import { MediaService } from 'src/app/shared/services/media.service';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
 
 @Component({
   selector: 'topic-create-container',
@@ -29,6 +30,8 @@ export class TopicCreateContainerComponent implements OnInit {
   public fileMediaType: MediaType;
   public isLoading: boolean;
 
+  public config: AngularEditorConfig;
+
   constructor(
     protected topicHttpService: TopicHttpService,
     protected mediaService: MediaService,
@@ -41,6 +44,26 @@ export class TopicCreateContainerComponent implements OnInit {
     this.file = '';
     this.fileMediaType = MediaType.UNKNOWN;
     this.isLoading = false;
+    this.config = {
+      editable: true,
+      spellcheck: true,
+      height: '10rem',
+      minHeight: '5rem',
+      placeholder: 'Enter text in this rich text editor....',
+      defaultParagraphSeparator: 'p',
+      defaultFontName: 'Arial',
+      customClasses: [
+        {
+          name: 'Quote',
+          class: 'quoteClass',
+        },
+        {
+          name: 'Title Heading',
+          class: 'titleHead',
+          tag: 'h1',
+        },
+      ],
+    };
   }
 
   ngOnInit(): void {

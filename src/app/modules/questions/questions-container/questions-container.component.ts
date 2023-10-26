@@ -9,9 +9,11 @@ import { QuestionHttpService } from 'src/app/shared/services/question-http.servi
 })
 export class QuestionsContainerComponent implements OnInit {
   public questions: Question[];
+  public isLoading: boolean;
 
   constructor(protected questionHttpService: QuestionHttpService) {
     this.questions = [];
+    this.isLoading = true;
   }
 
   ngOnInit(): void {
@@ -26,8 +28,9 @@ export class QuestionsContainerComponent implements OnInit {
     this.questionHttpService.retrieveQuestions().subscribe({
       next: (response) => {
         this.questions = response.data;
+        this.isLoading = false;
       },
-      error: (err) => {},
+      error: (err) => this.isLoading = false,
     });
   }
 }

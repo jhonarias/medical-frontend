@@ -12,10 +12,12 @@ import { UserType } from 'src/app/shared/enums';
 })
 export class RegisterFormComponent implements OnInit {
   public form: FormGroup;
+  public isLoading: boolean;
 
   constructor(protected authenticationService: AuthenticationService,
     private router: Router) {
     this.form = new FormGroup({});
+    this.isLoading = false;
   }
 
   ngOnInit(): void {
@@ -57,6 +59,7 @@ export class RegisterFormComponent implements OnInit {
   }
 
   protected register() {
+    this.isLoading = true;
     const request = this.buildRequest();
     this.authenticationService.register(request).subscribe({
       next: (response) => {
@@ -64,6 +67,7 @@ export class RegisterFormComponent implements OnInit {
       },
       error: (err) => {
         console.log('err', err);
+        this.isLoading = false;
       },
     });
   }

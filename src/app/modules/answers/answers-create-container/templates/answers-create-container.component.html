@@ -6,6 +6,14 @@
     <h1>Crear respuesta</h1>
 </ng-template>
 
+<ng-container *ngIf="isLoading;">
+    <div class="d-flex justify-content-center mb-5">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+</ng-container>
+
 <ng-container *ngIf="forms && forms.controls.length">
     <ng-container *ngFor="let form of forms.controls; let index = index">
         <answer-create-form [form]="form" [statusList]="statusList" [index]="index"></answer-create-form>
@@ -17,7 +25,9 @@
         <div class="mb-3">
             <button (click)="addForm()" class="btn btn-warning">Agregar respuesta</button>
         </div>
-       <button class="btn btn-success" (click)="validate()">
+       <button class="btn btn-success"
+            (click)="validate()"
+            [disabled]="isLoading ? 'disabled' : null">
            <span class="button_label">
                Guardar
            </span>

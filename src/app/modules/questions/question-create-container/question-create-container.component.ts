@@ -22,6 +22,7 @@ export class QuestionCreateContainerComponent implements OnInit {
   public resourceType: ResourceType;
   public resourceTypeEnum = ResourceType;
   public resourceId: string;
+  public isLoading: boolean;
 
   constructor(
     protected topicHttpService: TopicHttpService,
@@ -36,6 +37,7 @@ export class QuestionCreateContainerComponent implements OnInit {
     this.statusList = [];
     this.resourceType = ResourceType.TOPIC;
     this.resourceId = '';
+    this.isLoading = true;
   }
 
   ngOnInit(): void {
@@ -92,23 +94,29 @@ export class QuestionCreateContainerComponent implements OnInit {
   }
 
   protected retrieveTopics(): void {
+    this.isLoading = true;
     this.topicHttpService.retrieveTopics().subscribe({
       next: (response) => {
         this.topics = response.data;
+        this.isLoading = false;
       },
       error: (err) => {
         console.error(err);
+        this.isLoading = false;
       },
     });
   }
 
   protected retrieveSubTopics(): void {
+    this.isLoading = true;
     this.topicHttpService.retrieveSubTopics().subscribe({
       next: (response) => {
         this.subtopics = response.data;
+        this.isLoading = false;
       },
       error: (err) => {
         console.error(err);
+        this.isLoading = false;
       },
     });
   }
@@ -137,6 +145,7 @@ export class QuestionCreateContainerComponent implements OnInit {
   }
 
   protected register() {
+    this.isLoading = true;
     const requests = this.buildRequest();
     this.questionHttpService.createQuestion(requests).subscribe({
       next: (response) => {
@@ -144,6 +153,7 @@ export class QuestionCreateContainerComponent implements OnInit {
       },
       error: (err) => {
         console.error('err', err);
+        this.isLoading = false;
       },
     });
   }

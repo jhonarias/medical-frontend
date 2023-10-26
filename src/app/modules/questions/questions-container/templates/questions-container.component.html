@@ -1,46 +1,57 @@
 <div class="mb-3">
     <a routerLink="question-create" class="btn btn-primary">Crear pregunta</a>
 </div>
-<div class="list-group">
-    <ng-container *ngFor="let question of questions">
-        <a [routerLink]="'question-show/'+ question._id" class="list-group-item list-group-item-action active" aria-current="true">
-            <p class="mb-1">{{ question.description.length > 30 ? (question.description | slice:0:30) + '...' :
-                question.description }}</p>
-        </a>
-        <div class="list-group-item list-group-item-action">
-            <ng-container *ngIf="question.answers.length; else noAnswers">
-                <h6>Respuestas</h6>
-                <ol>
-                    <ng-container *ngFor="let answer of question.answers">
-                        <li>
-                            <a [routerLink]="'/answers/answer-show/'+ answer._id">{{answer.description}}</a></li>
-                    </ng-container>
-                </ol>
-            </ng-container>
-            <ng-template #noAnswers>
-                <h6>No hay respuesta</h6>
-            </ng-template>
+
+<ng-container *ngIf="isLoading; else content">
+    <div class="d-flex justify-content-center mt-5">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
         </div>
-        <ng-container *ngIf="question.topic">
-            <a [routerLink]="'/topics/topic-show/'+ question.topic._id" class="list-group-item list-group-item-action">
-                <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">{{ question.topic.name }}</h5>
-                    <div class="fw-bold badge bg-info d-flex align-items-center">Tema</div>
-                </div>
-                <!-- <p class="mb-1">{{ question.topic.description.length > 50 ? (question.topic.description | slice:0:50) +
-                    '...' : question.topic.description }}</p> -->
+    </div>
+</ng-container>
+
+<ng-template #content>
+    <div class="list-group">
+        <ng-container *ngFor="let question of questions">
+            <a [routerLink]="'question-show/'+ question._id" class="list-group-item list-group-item-action active" aria-current="true">
+                <p class="mb-1">{{ question.description.length > 30 ? (question.description | slice:0:30) + '...' :
+                    question.description }}</p>
             </a>
+            <div class="list-group-item list-group-item-action">
+                <ng-container *ngIf="question.answers.length; else noAnswers">
+                    <h6>Respuestas</h6>
+                    <ol>
+                        <ng-container *ngFor="let answer of question.answers">
+                            <li>
+                                <a [routerLink]="'/answers/answer-show/'+ answer._id">{{answer.description}}</a></li>
+                        </ng-container>
+                    </ol>
+                </ng-container>
+                <ng-template #noAnswers>
+                    <h6>No hay respuesta</h6>
+                </ng-template>
+            </div>
+            <ng-container *ngIf="question.topic">
+                <a [routerLink]="'/topics/topic-show/'+ question.topic._id" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{ question.topic.name }}</h5>
+                        <div class="fw-bold badge bg-info d-flex align-items-center">Tema</div>
+                    </div>
+                    <!-- <p class="mb-1">{{ question.topic.description.length > 50 ? (question.topic.description | slice:0:50) +
+                        '...' : question.topic.description }}</p> -->
+                </a>
+            </ng-container>
+            <ng-container *ngIf="question.subtopic">
+                <a [routerLink]="'/topics/subtopic-show/'+ question.subtopic._id"
+                    class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{ question.subtopic.name }}</h5>
+                        <div class="fw-bold badge bg-warning d-flex align-items-center">Subtema</div>
+                    </div>
+                    <!-- <p class="mb-1">{{ question.subtopic.description.length > 50 ? (question.subtopic.description |
+                        slice:0:50) + '...' : question.subtopic.description }}</p> -->
+                </a>
+            </ng-container>
         </ng-container>
-        <ng-container *ngIf="question.subtopic">
-            <a [routerLink]="'/topics/subtopic-show/'+ question.subtopic._id"
-                class="list-group-item list-group-item-action">
-                <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">{{ question.subtopic.name }}</h5>
-                    <div class="fw-bold badge bg-warning d-flex align-items-center">Subtema</div>
-                </div>
-                <!-- <p class="mb-1">{{ question.subtopic.description.length > 50 ? (question.subtopic.description |
-                    slice:0:50) + '...' : question.subtopic.description }}</p> -->
-            </a>
-        </ng-container>
-    </ng-container>
-</div>
+    </div>
+</ng-template>

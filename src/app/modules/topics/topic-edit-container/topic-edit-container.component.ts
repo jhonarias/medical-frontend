@@ -6,12 +6,11 @@ import { TopicHttpService } from '../../../shared/services/topic-http.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   SubtopicRequest,
-  SubtopicResponse,
   TopicRequest,
-  TopicResponse,
 } from 'src/app/shared/api-models';
 import { MediaType, ResourceType } from 'src/app/shared/enums';
 import { MediaService } from 'src/app/shared/services/media.service';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
 
 @Component({
   selector: 'topic-edit-container',
@@ -30,6 +29,7 @@ export class TopicEditContainerComponent implements OnInit {
   public fileMediaType: MediaType;
   public resourceTypeEnum = ResourceType;
   public isLoading: boolean;
+  public config: AngularEditorConfig;
 
   protected resourceType: ResourceType;
   protected resourceId: string;
@@ -53,6 +53,26 @@ export class TopicEditContainerComponent implements OnInit {
     this.mediaType = MediaType.UNKNOWN;
     this.fileMediaType = MediaType.UNKNOWN;
     this.isLoading = true;
+    this.config = {
+      editable: true,
+      spellcheck: true,
+      height: '100%',
+      minHeight: '5rem',
+      placeholder: 'Enter text in this rich text editor....',
+      defaultParagraphSeparator: 'p',
+      defaultFontName: 'Arial',
+      customClasses: [
+        {
+          name: 'Quote',
+          class: 'quoteClass',
+        },
+        {
+          name: 'Title Heading',
+          class: 'titleHead',
+          tag: 'h1',
+        },
+      ],
+    };
   }
 
   ngOnInit(): void {
@@ -124,9 +144,9 @@ export class TopicEditContainerComponent implements OnInit {
           } else {
             this.subtopic = response.data as Subtopic;
           }
+          this.isLoading = false;
           this.retrieveTopics();
           this.setFormValues();
-          this.isLoading = true;
         },
         error: (error) => {
           console.log(error);

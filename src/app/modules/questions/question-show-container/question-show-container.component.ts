@@ -9,6 +9,8 @@ import { QuestionHttpService } from 'src/app/shared/services/question-http.servi
   //   styleUrls: ['./auth.component.scss']
 })
 export class QuestionShowContainerComponent implements OnInit {
+
+  public isLoading: boolean;
   protected questionId: string;
   protected question: Question;
 
@@ -20,6 +22,7 @@ export class QuestionShowContainerComponent implements OnInit {
     this.questionId = '';
     // @ts-ignore
     this.question = undefined;
+    this.isLoading = true;
   }
 
   ngOnInit(): void {
@@ -59,9 +62,11 @@ export class QuestionShowContainerComponent implements OnInit {
     this.questionHttpService.getQuestionById(this.questionId).subscribe({
       next: (response) => {
         this.question = response.data;
+        this.isLoading = false;
       },
       error: (error) => {
         console.log(error);
+        this.isLoading = false;
       },
     });
   }

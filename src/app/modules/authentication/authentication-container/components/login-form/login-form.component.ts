@@ -74,8 +74,8 @@ export class LoginFormComponent implements OnInit {
   }
 
   protected login() {
-    const request = this.buildRequest();
     this.isLoading = true;
+    const request = this.buildRequest();
     this.authenticationService.login(request).subscribe({
       next: (response) => {
         this.handleLoginSuccess(response);

@@ -18,6 +18,7 @@ export class QuestionEditContainerComponent implements OnInit {
   public statusList: string[];
   public topics: Topic[];
   public subtopics: Subtopic[];
+  public isLoading: boolean;
   protected resourceId: string;
   protected question: Question;
 
@@ -34,6 +35,7 @@ export class QuestionEditContainerComponent implements OnInit {
     this.subtopics = [];
     // @ts-ignore
     this.question = undefined;
+    this.isLoading = true;
   }
 
   ngOnInit(): void {
@@ -68,11 +70,13 @@ export class QuestionEditContainerComponent implements OnInit {
         this.question = response.data;
         this.buildForm();
         this.setStatusList();
+        this.isLoading = false;
         this.retrieveTopics();
         this.retrieveSubTopics();
       },
       error: (error) => {
         console.log(error);
+        this.isLoading = false;
       },
     });
   }
@@ -85,23 +89,29 @@ export class QuestionEditContainerComponent implements OnInit {
   }
 
   protected retrieveTopics(): void {
+    this.isLoading = true;
     this.topicHttpService.retrieveTopics().subscribe({
       next: (response) => {
         this.topics = response.data;
+        this.isLoading = false;
       },
       error: (err) => {
         console.error(err);
+        this.isLoading = false;
       },
     });
   }
 
   protected retrieveSubTopics(): void {
+    this.isLoading = true;
     this.topicHttpService.retrieveSubTopics().subscribe({
       next: (response) => {
         this.subtopics = response.data;
+        this.isLoading = false;
       },
       error: (err) => {
         console.error(err);
+        this.isLoading = false;
       },
     });
   }
