@@ -4,7 +4,7 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QuestionRequest, QuestionResponse } from 'src/app/shared/api-models';
 import { QuestionStatus, ResourceType } from 'src/app/shared/enums';
-import { Question, Subtopic, Topic } from 'src/app/shared/models';
+import { Modal, Question, Subtopic, Topic } from 'src/app/shared/models';
 import { QuestionHttpService } from 'src/app/shared/services/question-http.service';
 import { TopicHttpService } from 'src/app/shared/services/topic-http.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -27,6 +27,7 @@ export class QuestionCreateContainerComponent implements OnInit {
   public resourceTypeEnum = ResourceType;
   public resourceId: string;
   public isLoading: boolean;
+  public modalModel: Modal;
 
   constructor(
     protected topicHttpService: TopicHttpService,
@@ -43,6 +44,10 @@ export class QuestionCreateContainerComponent implements OnInit {
     this.resourceType = ResourceType.TOPIC;
     this.resourceId = '';
     this.isLoading = true;
+    this.modalModel = {
+      title: '',
+      description: '',
+    };
   }
 
   ngOnInit(): void {
@@ -65,6 +70,10 @@ export class QuestionCreateContainerComponent implements OnInit {
     this.forms.push(form);
   }
 
+  public deleteForm(index: number): void {
+    this.forms.controls.splice(index, 1);
+  }
+
   public validate(): void {
     if (
       this.forms.valid
@@ -72,12 +81,12 @@ export class QuestionCreateContainerComponent implements OnInit {
     ) {
       this.register();
     } else {
-      // alert('Formulario invalido o debe seleccionar un tema o un subtema');
-      this.openSm();
+      this.openSm('Aviso!', 'Rellene los campos');
     }
   }
 
-  protected openSm(): void {
+  protected openSm(title: string, description: string): void {
+    this.modalModel = { title, description};
 		this.modalService.open(this.modalContent, { size: 'sm' });
 	}
 
@@ -111,8 +120,8 @@ export class QuestionCreateContainerComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
-        console.error(err);
         this.isLoading = false;
+        this.openSm('Aviso!', 'Problema al cargar los temas, vuelva a intentarlo');
       },
     });
   }
@@ -125,7 +134,7 @@ export class QuestionCreateContainerComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
-        console.error(err);
+        this.openSm('Aviso!', 'Problema al cargar los subtemas, vuelva a intentarlo');
         this.isLoading = false;
       },
     });
@@ -162,8 +171,8 @@ export class QuestionCreateContainerComponent implements OnInit {
         this.handleRegisterSuccess(response);
       },
       error: (err) => {
-        console.error('err', err);
         this.isLoading = false;
+        this.openSm('Aviso!', 'Problema al guardar, vuelva a intentarlo');
       },
     });
   }

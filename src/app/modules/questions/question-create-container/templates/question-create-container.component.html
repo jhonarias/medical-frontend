@@ -2,11 +2,11 @@
 
 <ng-template #modalContent let-modal>
 	<div class="modal-header">
-		<h4 class="modal-title">Aviso!</h4>
+		<h4 class="modal-title">{{ modalModel.title }}</h4>
 		<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
 	</div>
 	<div class="modal-body">
-		<p>Formulario invalido o debe seleccionar un tema o un subtema</p>
+		<p>{{ modalModel.description }}</p>
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-light" (click)="modal.close('Close click')">Cerrar</button>
@@ -67,9 +67,11 @@
             </div>
         </ng-container>
     </form>
-    <div class="mb-3 text-end">
-        <button (click)="deleteForm(index)" class="btn btn-danger">Eliminar pregunta</button>
-    </div>
+    <ng-container *ngIf="forms.controls.length !== 1">
+        <div class="mb-3 text-end">
+            <button (click)="deleteForm(index)" class="btn btn-danger">Eliminar pregunta</button>
+        </div>
+    </ng-container>
 </ng-container>
 <div class="text-center">
     <div class="mb-3">

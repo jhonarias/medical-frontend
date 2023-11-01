@@ -18,9 +18,11 @@
     <ng-container *ngFor="let form of forms.controls; let index = index">
         <h2 class="mb-3">Respuesta {{ index+1 }}</h2>
         <answer-create-form [form]="form" [statusList]="statusList" [index]="index"></answer-create-form>
-        <div class="mb-3 text-end">
-            <button (click)="deleteForm(index)" class="btn btn-danger">Eliminar respuesta</button>
-        </div>
+        <ng-container *ngIf="forms.controls.length !== 1">
+            <div class="mb-3 text-end">
+                <button (click)="deleteForm(index)" class="btn btn-danger">Eliminar respuesta</button>
+            </div>
+        </ng-container>
     </ng-container>
     <div class="text-center">
         <div class="mb-3">

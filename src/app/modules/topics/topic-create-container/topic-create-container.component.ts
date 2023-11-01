@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { TopicStatus } from '../enums';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TopicHttpService } from '../../../shared/services/topic-http.service';
-import { Topic } from 'src/app/shared/models';
+import { Modal, Topic } from 'src/app/shared/models';
 import {
   SubtopicRequest,
   SubtopicResponse,
@@ -13,6 +13,7 @@ import {
 import { MediaType, ResourceType } from 'src/app/shared/enums';
 import { MediaService } from 'src/app/shared/services/media.service';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'topic-create-container',
@@ -20,6 +21,9 @@ import { AngularEditorConfig } from '@kolkov/angular-editor';
   //   styleUrls: ['./auth.component.scss']
 })
 export class TopicCreateContainerComponent implements OnInit {
+
+  @ViewChild('modalContent') modalContent!: ElementRef;
+
   public form: FormGroup;
   public resourceType: ResourceType;
   public resourceTypeEnum = ResourceType;
@@ -29,13 +33,15 @@ export class TopicCreateContainerComponent implements OnInit {
   public mediaTypeEnum = MediaType;
   public fileMediaType: MediaType;
   public isLoading: boolean;
+  public modalModel: Modal;
 
   public config: AngularEditorConfig;
 
   constructor(
     protected topicHttpService: TopicHttpService,
     protected mediaService: MediaService,
-    private router: Router
+    private router: Router,
+    private modalService: NgbModal
   ) {
     this.form = new FormGroup({});
     this.statusList = [];
@@ -44,25 +50,11 @@ export class TopicCreateContainerComponent implements OnInit {
     this.file = '';
     this.fileMediaType = MediaType.UNKNOWN;
     this.isLoading = false;
-    this.config = {
-      editable: true,
-      spellcheck: true,
-      height: '10rem',
-      minHeight: '5rem',
-      placeholder: 'Enter text in this rich text editor....',
-      defaultParagraphSeparator: 'p',
-      defaultFontName: 'Arial',
-      customClasses: [
-        {
-          name: 'Quote',
-          class: 'quoteClass',
-        },
-        {
-          name: 'Title Heading',
-          class: 'titleHead',
-          tag: 'h1',
-        },
-      ],
+    this.config = {};
+    this.setAngularEditorConfig();
+    this.modalModel = {
+      title: '',
+      description: '',
     };
   }
 
@@ -74,7 +66,7 @@ export class TopicCreateContainerComponent implements OnInit {
     if (this.form.valid) {
       this.register();
     } else {
-      alert('form invalid');
+      this.openSm('Aviso!', 'Rellene los campos');
     }
   }
 
@@ -95,11 +87,31 @@ export class TopicCreateContainerComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
+  protected openSm(title: string, description: string): void {
+    this.modalModel = { title, description};
+		this.modalService.open(this.modalContent, { size: 'sm' });
+	}
+
   protected internalInit(): void {
     this.setStatusList();
     this.setResourceType();
     this.retrieveTopics();
     this.buildForm();
+  }
+
+  protected setAngularEditorConfig(): void {
+    this.config = {
+      editable: true,
+      spellcheck: true,
+      height: '10rem',
+      minHeight: '5rem',
+      placeholder: '',
+      defaultParagraphSeparator: 'p',
+      defaultFontName: 'Roboto',
+      fonts: [
+        {class: 'Roboto', name: 'Roboto'},
+      ]
+    };
   }
 
   protected setStatusList(): void {
@@ -138,8 +150,8 @@ export class TopicCreateContainerComponent implements OnInit {
           this.isLoading = false;
         },
         error: (err) => {
-          console.error(err);
           this.isLoading = false;
+          this.openSm('Aviso!', 'Problema al cargar los temas, vuelva a intentarlo');
         },
       });
     }
@@ -163,8 +175,8 @@ export class TopicCreateContainerComponent implements OnInit {
           this.handleRegisterSuccess(response);
         },
         error: (err) => {
-          console.log('err', err);
           this.isLoading = false;
+          this.openSm('Aviso!', 'Problema al guardar, vuelva a intentarlo');
         },
       });
   }

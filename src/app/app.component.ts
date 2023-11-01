@@ -14,6 +14,7 @@ export class AppComponent implements OnInit {
   public isAthenticated: boolean;
   public user: User;
   public userType = UserType;
+  public showMenuResponsive: boolean;
 
   constructor(
     protected authenticationStorageService: AuthenticationStorageService,
@@ -23,6 +24,7 @@ export class AppComponent implements OnInit {
     this.isAthenticated = false;
     // @ts-ignore
     this.user = undefined;
+    this.showMenuResponsive = false;
     this.setupEvents();
   }
 
