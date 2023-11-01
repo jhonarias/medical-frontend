@@ -1,4 +1,18 @@
 <h1>Crear Preguntas</h1>
+
+<ng-template #modalContent let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title">Aviso!</h4>
+		<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+	</div>
+	<div class="modal-body">
+		<p>Formulario invalido o debe seleccionar un tema o un subtema</p>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-light" (click)="modal.close('Close click')">Cerrar</button>
+	</div>
+</ng-template>
+
 <ng-container *ngIf="isLoading;">
     <div class="d-flex justify-content-center mb-5">
         <div class="spinner-border" role="status">

@@ -8,9 +8,10 @@ import { TopicHttpService } from 'src/app/shared/services/topic-http.service';
 import { QuestionShowContainerComponent } from './question-show-container/question-show-container.component';
 import { QuestionCreateContainerComponent } from './question-create-container/question-create-container.component';
 import { QuestionEditContainerComponent } from './question-edit-container/question-edit-container.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
-  imports: [CommonModule, ReactiveFormsModule, QuestionsContainerRoutingModule],
+  imports: [CommonModule, ReactiveFormsModule, QuestionsContainerRoutingModule, NgbModule],
   declarations: [
     QuestionsContainerComponent,
     QuestionShowContainerComponent,

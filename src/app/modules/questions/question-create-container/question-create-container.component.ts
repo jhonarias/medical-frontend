@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,6 +7,7 @@ import { QuestionStatus, ResourceType } from 'src/app/shared/enums';
 import { Question, Subtopic, Topic } from 'src/app/shared/models';
 import { QuestionHttpService } from 'src/app/shared/services/question-http.service';
 import { TopicHttpService } from 'src/app/shared/services/topic-http.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'question-create-container',
@@ -14,6 +15,9 @@ import { TopicHttpService } from 'src/app/shared/services/topic-http.service';
   //   styleUrls: ['./auth.component.scss']
 })
 export class QuestionCreateContainerComponent implements OnInit {
+
+  @ViewChild('modalContent') modalContent!: ElementRef;
+
   public forms: FormArray;
   public topics: Topic[];
   public subtopics: Subtopic[];
@@ -28,7 +32,8 @@ export class QuestionCreateContainerComponent implements OnInit {
     protected topicHttpService: TopicHttpService,
     protected questionHttpService: QuestionHttpService,
     private route: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    private modalService: NgbModal
   ) {
     // @ts-ignore
     this.forms = new FormArray([]);
@@ -67,9 +72,14 @@ export class QuestionCreateContainerComponent implements OnInit {
     ) {
       this.register();
     } else {
-      alert('Formulario invalido o debe seleccionar un tema o un subtema');
+      // alert('Formulario invalido o debe seleccionar un tema o un subtema');
+      this.openSm();
     }
   }
+
+  protected openSm(): void {
+		this.modalService.open(this.modalContent, { size: 'sm' });
+	}
 
   protected internalInit(): void {
     this.subscribeToParams();
