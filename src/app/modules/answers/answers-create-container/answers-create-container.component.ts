@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AnswerDataResponse, AnswerRequest } from 'src/app/shared/api-models';
 import { AnswerStatus } from 'src/app/shared/enums';
-import { Answer } from 'src/app/shared/models';
+import { Answer, Modal } from 'src/app/shared/models';
 import { AnswerHttpService } from 'src/app/shared/services/answer-http.service';
 
 @Component({
@@ -11,21 +12,30 @@ import { AnswerHttpService } from 'src/app/shared/services/answer-http.service';
   templateUrl: './templates/answers-create-container.component.html',
 })
 export class AnswersCreateContainerComponent implements OnInit {
+
+  @ViewChild('modalContent') modalContent!: ElementRef;
+
   public forms: FormArray;
   public statusList: string[];
   public questionId: string;
   public isLoading: boolean;
+  public modalModel: Modal;
 
   constructor(
     protected answerHttpService: AnswerHttpService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private modalService: NgbModal
   ) {
     this.questionId = '';
     // @ts-ignore
     this.forms = new FormArray([]);
     this.statusList = [];
     this.isLoading = false;
+    this.modalModel = {
+      title: '',
+      description: '',
+    };
   }
 
   ngOnInit(): void {
@@ -49,7 +59,7 @@ export class AnswersCreateContainerComponent implements OnInit {
     if (this.forms.valid) {
       this.register();
     } else {
-      alert('form invalid');
+      this.openSm('Aviso!', 'Rellene los campos');
     }
   }
 
@@ -58,6 +68,11 @@ export class AnswersCreateContainerComponent implements OnInit {
     this.setStatusList();
     this.addForm();
   }
+
+  protected openSm(title: string, description: string): void {
+    this.modalModel = { title, description};
+		this.modalService.open(this.modalContent, { size: 'sm' });
+	}
 
   protected subscribeToParams(): void {
     this.route.queryParams.subscribe((params) => {
@@ -85,12 +100,14 @@ export class AnswersCreateContainerComponent implements OnInit {
   protected register() {
     this.isLoading = true;
     const request = this.buildRequest();
-    console.log(request);
     this.answerHttpService.createAnswers(request).subscribe({
       next: (response) => {
         this.handleRegisterSuccess(response);
       },
-      error: (err) => {console.error(err); this.isLoading = false;}
+      error: (err) => {
+        this.isLoading = false;
+        this.openSm('Aviso!', 'Problema al guardar, vuelva a intentarlo');
+      }
     });
   }
 
