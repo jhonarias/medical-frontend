@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { TopicStatus } from '../enums';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subtopic, Topic } from 'src/app/shared/models';
+import { Modal, Subtopic, Topic } from 'src/app/shared/models';
 import { TopicHttpService } from '../../../shared/services/topic-http.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
@@ -11,6 +11,7 @@ import {
 import { MediaType, ResourceType } from 'src/app/shared/enums';
 import { MediaService } from 'src/app/shared/services/media.service';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'topic-edit-container',
@@ -18,6 +19,9 @@ import { AngularEditorConfig } from '@kolkov/angular-editor';
   //   styleUrls: ['./auth.component.scss']
 })
 export class TopicEditContainerComponent implements OnInit {
+
+  @ViewChild('modalContent') modalContent!: ElementRef;
+
   public topic: Topic;
   public subtopic: Subtopic;
   public form: FormGroup;
@@ -30,6 +34,7 @@ export class TopicEditContainerComponent implements OnInit {
   public resourceTypeEnum = ResourceType;
   public isLoading: boolean;
   public config: AngularEditorConfig;
+  public modalModel: Modal;
 
   protected resourceType: ResourceType;
   protected resourceId: string;
@@ -38,7 +43,8 @@ export class TopicEditContainerComponent implements OnInit {
     protected topicHttpService: TopicHttpService,
     protected mediaService: MediaService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private modalService: NgbModal
   ) {
     this.form = new FormGroup({});
     // @ts-ignore
@@ -73,6 +79,10 @@ export class TopicEditContainerComponent implements OnInit {
         },
       ],
     };
+    this.modalModel = {
+      title: '',
+      description: '',
+    };
   }
 
   ngOnInit(): void {
@@ -83,7 +93,7 @@ export class TopicEditContainerComponent implements OnInit {
     if (this.form.valid) {
       this.update();
     } else {
-      alert('form invalid');
+      this.openSm('Aviso!', 'Rellene los campos');
     }
   }
 
@@ -149,8 +159,8 @@ export class TopicEditContainerComponent implements OnInit {
           this.setFormValues();
         },
         error: (error) => {
-          console.log(error);
           this.isLoading = false;
+          this.openSm('Aviso!', 'Problema al obtener el recurso, vuelva a intentarlo');
         },
       });
   }
@@ -164,8 +174,8 @@ export class TopicEditContainerComponent implements OnInit {
           this.isLoading = false;
         },
         error: (err) => {
-          console.error(err);
           this.isLoading = false;
+          this.openSm('Aviso!', 'Problema al cargar los recursos, vuelva a intentarlo');
         },
       });
     }
@@ -215,9 +225,14 @@ export class TopicEditContainerComponent implements OnInit {
           this.router.navigate(['/topics']);
         },
         error: (err) => {
-          console.log('err', err);
           this.isLoading = false;
+          this.openSm('Aviso!', 'Problema al actualizar el recurso, vuelva a intentarlo');
         },
       });
   }
+
+  protected openSm(title: string, description: string): void {
+    this.modalModel = { title, description};
+		this.modalService.open(this.modalContent, { size: 'sm' });
+	}
 }

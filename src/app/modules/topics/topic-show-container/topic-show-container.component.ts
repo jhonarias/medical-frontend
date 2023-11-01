@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -10,12 +10,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SubtopicResponse, TopicResponse } from 'src/app/shared/api-models';
 import { MediaType, ResourceType, UserType } from 'src/app/shared/enums';
 import { formGroupHelper } from 'src/app/shared/helpers';
-import { Answer, Question, Subtopic, Topic } from 'src/app/shared/models';
+import { Answer, Modal, Question, Subtopic, Topic } from 'src/app/shared/models';
 import { QuestionHttpService } from 'src/app/shared/services/question-http.service';
 import { AuthenticatedService } from '../../../shared/services/authenticated.service';
 import { TopicHttpService } from '../../../shared/services/topic-http.service';
 import { FormQuestion, SummarySolvedQuestion } from '../models';
 import { MediaService } from 'src/app/shared/services/media.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'topic-show-container',
@@ -23,6 +24,9 @@ import { MediaService } from 'src/app/shared/services/media.service';
   //   styleUrls: ['./auth.component.scss']
 })
 export class TopicShowContainerComponent implements OnInit {
+
+  @ViewChild('modalContent') modalContent!: ElementRef;
+
   public topic: Topic;
   public subtopic: Subtopic;
   public questions: Question[];
@@ -32,6 +36,7 @@ export class TopicShowContainerComponent implements OnInit {
   public mediaType: MediaType;
   public mediaTypeEnum = MediaType;
   public isLoading: boolean;
+  public modalModel: Modal;
 
   protected resourceType: ResourceType;
   protected resourceId: string;
@@ -43,7 +48,8 @@ export class TopicShowContainerComponent implements OnInit {
     protected mediaService: MediaService,
     private router: Router,
     private route: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private modalService: NgbModal
   ) {
     this.resourceType = ResourceType.TOPIC;
     this.resourceId = '';
@@ -58,6 +64,10 @@ export class TopicShowContainerComponent implements OnInit {
     this.summarySolvedQuestions = [];
     this.mediaType = this.mediaTypeEnum.UNKNOWN;
     this.isLoading = true;
+    this.modalModel = {
+      title: '',
+      description: '',
+    };
   }
 
   ngOnInit(): void {
@@ -84,7 +94,7 @@ export class TopicShowContainerComponent implements OnInit {
             alert(response.data.name + ' eliminado correctamente');
             this.router.navigate(['/topics']);
           },
-          error: (err) => console.error(err),
+          error: (err) => this.openSm('Aviso!', 'Problema al eliminar el recurso, vuelva a intentarlo'),
         });
     }
   }
@@ -117,6 +127,11 @@ export class TopicShowContainerComponent implements OnInit {
     this.summarySolvedQuestions = [];
     this.buildQuestionsForm();
   }
+
+  protected openSm(title: string, description: string): void {
+    this.modalModel = { title, description};
+		this.modalService.open(this.modalContent, { size: 'sm' });
+	}
 
   protected buildAnswersSummary(): void {
     this.summarySolvedQuestions = [];
@@ -153,7 +168,7 @@ export class TopicShowContainerComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error(error);
+        this.openSm('Aviso!', 'Problema al obtener las preguntas del tema, vuelva a intentarlo')
         this.isLoading = false;
       },
     });
@@ -201,8 +216,8 @@ export class TopicShowContainerComponent implements OnInit {
           this.isLoading = false;
         },
         error: (error) => {
-          console.log(error);
           this.isLoading = false;
+          this.openSm('Aviso!', 'Problema al obtener las preguntas del subtema, vuelva a intentarlo')
         },
       });
   }
@@ -246,8 +261,8 @@ export class TopicShowContainerComponent implements OnInit {
           this.isLoading = false;
         },
         error: (error) => {
-          console.log(error);
           this.isLoading = false;
+          this.openSm('Aviso!', 'Problema al obtener el recurso, vuelva a intentarlo')
         },
       });
   }
